@@ -13,7 +13,12 @@ import yaml
 import re
 import signal
 
+from .display import get_annotated_html
+
 __version__ = '0.0.1'
+
+# the default is user home directory + .lean4_jupyter
+__lean4_jupyter_dir__ = os.path.join(os.path.expanduser('~'), '.lean4_jupyter')
 
 # Lean (version 4.8.0-rc1, aarch64-apple-darwin, commit dcccfb73cb24, Release)
 version_pat = re.compile(r'version (\d+(\.\d+)+(-rc\d+)?)')
@@ -21,8 +26,18 @@ version_pat = re.compile(r'version (\d+(\.\d+)+(-rc\d+)?)')
 # Based on https://github.com/zhangir-azerbayev/pySagredo/blob/main/pysagredo/gym/__init__.py
 class Lean4Wrapper:
     def __init__(self):
-        self.proc = pexpect.spawn("./repl", echo=True, encoding='utf-8', codec_errors='replace')
+        self.check()
+        self.proc = pexpect.spawn("repl", echo=True, encoding='utf-8', codec_errors='replace')
         self.env = None
+        self.commends = {}
+
+    def check(self):
+        # check if Lean is installed
+        try:
+            check_output(['lean', '--version'])
+        except FileNotFoundError:
+            raise FileNotFoundError("Lean is not installed. Please install Lean before using this kernel.")
+        
     
     def run_command(self, code, verbose=False, timeout=20):
 
@@ -53,6 +68,7 @@ class Lean4Wrapper:
 
             if 'env' in output_dict:
                 self.env = output_dict['env']
+                self.commends[self.env] = command_dict
 
             return output_dict
         except pexpect.exceptions.TIMEOUT:
@@ -109,8 +125,37 @@ class Lean4Kernel(Kernel):
     def process_output(self, output):
         obj = output
         plain_output = yaml.dump(obj)
-        stream_content = {'name': 'stdout', 'text': plain_output}
-        self.send_response(self.iopub_socket, 'stream', stream_content)
+        # stream_content = {'name': 'stdout', 'text': plain_output}
+        # self.send_response(self.iopub_socket, 'stream', stream_content)
+        (header, fragments) = get_annotated_html(obj)
+        annotated_html = '\n'.join([fragment.render() for fragment in fragments])
+        # https://jupyterbook.org/en/stable/content/code-outputs.html#render-priority
+        self.send_response(self.iopub_socket, 'display_data', {
+            'metadata': {},
+            'data': {
+                'text/plain': plain_output,
+                'text/html': '''
+                <link rel="stylesheet" href="https://lean-lang.org/lean4/doc/alectryon.css">
+                <link rel="stylesheet" href="https://lean-lang.org/lean4/doc/pygments.css">
+                <script src="https://lean-lang.org/lean4/doc/alectryon.js"></script>
+                <script src="https://lean-lang.org/lean4/doc/highlight.js"></script>
+                <style>
+                    @media (any-hover: hover) {
+                        .alectryon-io .alectryon-sentence:hover .alectryon-output,
+                        .alectryon-io .alectryon-token:hover .alectryon-type-info-wrapper,
+                        .alectryon-io .alectryon-token:hover .alectryon-type-info-wrapper {
+                            position: unset;
+                        }
+                    }
+                </style>
+                <h2>Code</h2>
+                %s
+                <div class="alectryon-root alectryon-centered">
+                %s
+                <pre>%s</pre>
+                </div>''' % (header, annotated_html, plain_output)
+            }
+        })
 
     def do_execute(self, code, silent, store_history=True,
                    user_expressions=None, allow_stdin=False):
