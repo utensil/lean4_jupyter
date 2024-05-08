@@ -28,7 +28,7 @@ class Lean4Wrapper:
         self.check()
         self.proc = pexpect.spawn("repl", echo=True, encoding='utf-8', codec_errors='replace')
         self.env = None
-        self.commends = {}
+        self.commands = {}
 
     def check(self):
         # check if Lean is installed
