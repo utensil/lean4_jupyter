@@ -8,29 +8,30 @@ import uuid
 import random
 import string
 import json
+import yaml
 
 import re
 import signal
 
 __version__ = '0.0.1'
 
-# Lean (version 4.7.0-rc2, aarch64-apple-darwin, commit 6fce8f7d5cd1, Release)
+# Lean (version 4.8.0-rc1, aarch64-apple-darwin, commit dcccfb73cb24, Release)
 version_pat = re.compile(r'version (\d+(\.\d+)+(-rc\d+)?)')
 
 # Based on https://github.com/zhangir-azerbayev/pySagredo/blob/main/pysagredo/gym/__init__.py
 class Lean4Wrapper:
     def __init__(self):
         self.proc = pexpect.spawn("./repl", echo=True, encoding='utf-8', codec_errors='replace')
+        self.env = None
     
-    def run_command(self, code, env=None, verbose=False, timeout=20):
-        if env:
-            command = (
-                '{ "cmd" : "' + repr(code)[1:-1] + f'", "env" : {env}' + " }"
-            )  # [1:-1] removes single quotes
-        else:
-            command = (
-                '{ "cmd" : "' + repr(code)[1:-1] + '" }'
-            )  # [1:-1] removes single quotes
+    def run_command(self, code, verbose=False, timeout=20):
+
+        command_dict = {
+                "cmd": repr(code)[1:-1],
+                "env": self.env
+        } # [1:-1] removes single quotes
+
+        command = json.dumps(command_dict)
 
         if verbose:
             print(command)
@@ -47,7 +48,13 @@ class Lean4Wrapper:
             output = self.proc.before + self.proc.match.group()
             if verbose: 
                 print(output)
-            return json.loads(output)
+            output_dict = json.loads(output)
+            output_dict['sent'] = command_dict
+
+            if 'env' in output_dict:
+                self.env = output_dict['env']
+
+            return output_dict
         except pexpect.exceptions.TIMEOUT:
             self.proc.sendintr()
             interrupted = True
@@ -101,7 +108,7 @@ class Lean4Kernel(Kernel):
 
     def process_output(self, output):
         obj = output
-        plain_output = json.dumps(obj)
+        plain_output = yaml.dump(obj)
         stream_content = {'name': 'stdout', 'text': plain_output}
         self.send_response(self.iopub_socket, 'stream', stream_content)
 
