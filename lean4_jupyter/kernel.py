@@ -38,30 +38,23 @@ class Lean4ReplWrapper:
             raise FileNotFoundError("Lean is not installed. Please install Lean before using this kernel.")
         
     
-    def run_command(self, code, verbose=False, timeout=20):
+    def run_command(self, code, timeout=20):
         command_dict = {
                 "cmd": code,
                 "env": self.env
         } # [1:-1] removes single quotes
 
         command = json.dumps(command_dict)
-
-        if verbose:
-            print(command)
         self.proc.sendline(command)
         self.proc.expect_exact(command + "\r\n")
-
-        # debugging
-        # print(self.proc.before)
 
         self.proc.sendline()
         self.proc.expect_exact("\r\n")
         try:
             index = self.proc.expect('env": \d+\}', timeout=timeout)
             output = self.proc.before + self.proc.match.group()
-            if verbose: 
-                print(output)
             output_dict = json.loads(output)
+            output_dict['sent_raw'] = output
             output_dict['sent'] = command_dict
 
             if 'env' in output_dict:

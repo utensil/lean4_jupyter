@@ -57,7 +57,6 @@ class ReplOutput:
         self.message_dict = self._index_messages(output_dict)
 
         self.env = output_dict["env"]
-        self.sent = output_dict["sent"]
         
         self.output_dict = output_dict
         self.output_dict['message_dict'] = self.message_dict
@@ -68,10 +67,10 @@ class ReplOutput:
         self.output_alectryon = '\n'.join([fragment.render() for fragment in fragments])
         return self.HTML_TEMPLATE.format(header=self.HTML_HEADER, env=self.env, code=self.output_alectryon, code_raw=self.output_yaml)
 
-    def _get_annotated_html(self, repl_output_dict):
+    def _get_annotated_html(self, output_dict):
         highlighter = make_highlighter("html", "lean4") # coq, pygments_style)
         sentences = []
-        cmd = self.sent['cmd']
+        cmd = output_dict["sent"]['cmd']
         for line_no, cmd_line in enumerate(cmd.split('\n'), start=1):
             messages = [] # [Message(contents=f'This is line {line_no}')]
             if line_no in self.message_dict:
