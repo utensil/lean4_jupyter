@@ -60,7 +60,7 @@ class ReplOutput:
         
         self.output_dict = output_dict
         self.output_dict['message_dict'] = self.message_dict
-        self.output_yaml = yaml.dump(self.output_dict)
+        self.output_yaml = yaml.safe_dump(self.output_dict)
 
     def html(self):
         fragments = self._get_annotated_html(self.output_dict)
