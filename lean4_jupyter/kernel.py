@@ -54,7 +54,7 @@ class Lean4ReplWrapper:
             index = self.proc.expect('env": \d+\}', timeout=timeout)
             output = self.proc.before + self.proc.match.group()
             output_dict = json.loads(output)
-            output_dict['sent_raw'] = output
+            output_dict['sent_raw'] = command
             output_dict['sent'] = command_dict
 
             if 'env' in output_dict:
@@ -119,7 +119,7 @@ class Lean4Kernel(Kernel):
         self.send_response(self.iopub_socket, 'display_data', {
             'metadata': {},
             'data': {
-                'text/plain': o.output_yaml,
+                'text/plain': json.dumps(output),
                 'text/html': o.html()
             }
         })
