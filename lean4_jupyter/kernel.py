@@ -40,7 +40,7 @@ class Lean4Wrapper:
     
     def run_command(self, code, verbose=False, timeout=20):
         command_dict = {
-                "cmd": repr(code)[1:-1],
+                "cmd": code,
                 "env": self.env
         } # [1:-1] removes single quotes
 
@@ -96,7 +96,7 @@ class Lean4Kernel(Kernel):
         return self._banner
 
     language_info = {'name': 'lean4',
-                     'codemirror_mode': 'shell',  # TODO: fix code mirror mode
+                     'codemirror_mode': 'python',  # TODO: fix code mirror mode
                      'mimetype': 'text/x-lean4',
                      'file_extension': '.lean'}
 

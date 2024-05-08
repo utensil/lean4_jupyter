@@ -2,6 +2,7 @@ from alectryon.core import Goal, Hypothesis, Message, Sentence, Text
 from alectryon.serapi import annotate
 from alectryon.pygments import make_highlighter
 from alectryon.html import HtmlGenerator, HEADER
+import json
 import yaml
 
 class ReplOutput:
