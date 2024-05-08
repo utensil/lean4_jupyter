@@ -12,7 +12,7 @@ from .resources import _ICON_PATH
 kernel_json = {"argv":[sys.executable,"-m","lean4_jupyter", "-f", "{connection_file}"],
  "display_name":"Lean 4",
  "language":"lean4",
- "codemirror_mode":"python",
+ "codemirror_mode":"python", # TODO: fix code mirror mode
 #  "env":{"PS1": "$"}
 }
 

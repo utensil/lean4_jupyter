@@ -17,7 +17,7 @@ classifiers = [
     "Operating System :: MacOS",
     "Operating System :: POSIX :: Linux"
 ]
-dynamic = ["version", "description"]
+dynamic = ["version"]
 
 [project.urls]
 Source = "https://github.com/utensil/lean4_jupyter"
