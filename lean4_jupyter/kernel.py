@@ -66,7 +66,7 @@ class Lean4Wrapper:
 
             if 'env' in output_dict:
                 self.env = output_dict['env']
-                self.commends[self.env] = command_dict
+                self.commands[self.env] = command_dict
 
             return output_dict
         except pexpect.exceptions.TIMEOUT:
