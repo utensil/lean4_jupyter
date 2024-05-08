@@ -2,6 +2,14 @@
 
 A Lean 4 Jupyter kernel via [REPL](https://github.com/leanprover-community/repl).
 
+## Status
+
+Early stage of development.
+
+What's working:
+
+- The kernel is able to execute Lean 4 commands and display the output using alectryon style annotation
+
 ## Installation
 
 First, you need a working Lean 4 installation. You can install it via [elan](https://github.com/leanprover/elan).

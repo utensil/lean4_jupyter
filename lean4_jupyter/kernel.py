@@ -8,12 +8,11 @@ import uuid
 import random
 import string
 import json
-import yaml
 
 import re
 import signal
 
-from .display import get_annotated_html
+from .display import ReplOutput
 
 __version__ = '0.0.1'
 
@@ -40,7 +39,6 @@ class Lean4Wrapper:
         
     
     def run_command(self, code, verbose=False, timeout=20):
-
         command_dict = {
                 "cmd": repr(code)[1:-1],
                 "env": self.env
@@ -123,37 +121,13 @@ class Lean4Kernel(Kernel):
             signal.signal(signal.SIGPIPE, old_sigpipe_handler)
 
     def process_output(self, output):
-        obj = output
-        plain_output = yaml.dump(obj)
-        # stream_content = {'name': 'stdout', 'text': plain_output}
-        # self.send_response(self.iopub_socket, 'stream', stream_content)
-        (header, fragments) = get_annotated_html(obj)
-        annotated_html = '\n'.join([fragment.render() for fragment in fragments])
+        o = ReplOutput(output)
         # https://jupyterbook.org/en/stable/content/code-outputs.html#render-priority
         self.send_response(self.iopub_socket, 'display_data', {
             'metadata': {},
             'data': {
-                'text/plain': plain_output,
-                'text/html': '''
-                <link rel="stylesheet" href="https://lean-lang.org/lean4/doc/alectryon.css">
-                <link rel="stylesheet" href="https://lean-lang.org/lean4/doc/pygments.css">
-                <script src="https://lean-lang.org/lean4/doc/alectryon.js"></script>
-                <script src="https://lean-lang.org/lean4/doc/highlight.js"></script>
-                <style>
-                    @media (any-hover: hover) {
-                        .alectryon-io .alectryon-sentence:hover .alectryon-output,
-                        .alectryon-io .alectryon-token:hover .alectryon-type-info-wrapper,
-                        .alectryon-io .alectryon-token:hover .alectryon-type-info-wrapper {
-                            position: unset;
-                        }
-                    }
-                </style>
-                <h2>Code</h2>
-                %s
-                <div class="alectryon-root alectryon-centered">
-                %s
-                <pre>%s</pre>
-                </div>''' % (header, annotated_html, plain_output)
+                'text/plain': o.output_yaml,
+                'text/html': o.html()
             }
         })
 
