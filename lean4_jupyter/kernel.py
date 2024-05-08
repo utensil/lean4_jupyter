@@ -23,7 +23,7 @@ __lean4_jupyter_dir__ = os.path.join(os.path.expanduser('~'), '.lean4_jupyter')
 version_pat = re.compile(r'version (\d+(\.\d+)+(-rc\d+)?)')
 
 # Based on https://github.com/zhangir-azerbayev/pySagredo/blob/main/pysagredo/gym/__init__.py
-class Lean4Wrapper:
+class Lean4ReplWrapper:
     def __init__(self):
         self.check()
         self.proc = pexpect.spawn("repl", echo=True, encoding='utf-8', codec_errors='replace')
@@ -115,7 +115,7 @@ class Lean4Kernel(Kernel):
         # producers. 
         old_sigpipe_handler = signal.signal(signal.SIGPIPE, signal.SIG_DFL)
         try:
-            self.leanwrapper = Lean4Wrapper()
+            self.leanwrapper = Lean4ReplWrapper()
         finally:
             signal.signal(signal.SIGINT, old_sigint_handler)
             signal.signal(signal.SIGPIPE, old_sigpipe_handler)
