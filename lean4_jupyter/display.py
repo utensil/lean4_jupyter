@@ -5,7 +5,7 @@ from alectryon.html import HtmlGenerator, HEADER
 import json
 import yaml
 
-class ReplOutput:
+class Lean4ReplOutput:
 
     HTML_HEADER = '''
         <link rel="stylesheet" href="https://lean-lang.org/lean4/doc/alectryon.css">
@@ -53,7 +53,10 @@ class ReplOutput:
         </div>
     '''
 
-    def __init__(self, output_dict):
+    def __init__(self, output_raw, input):
+        self.raw = output_raw
+        self.input = input
+        output_dict = json.loads(output_raw)
         self.message_dict = self._index_messages(output_dict)
 
         self.env = output_dict["env"]
@@ -63,14 +66,14 @@ class ReplOutput:
         self.output_yaml = yaml.safe_dump(self.output_dict)
 
     def html(self):
-        fragments = self._get_annotated_html(self.output_dict)
+        fragments = self._get_annotated_html(self.input, self.output_dict)
         self.output_alectryon = '\n'.join([fragment.render() for fragment in fragments])
         return self.HTML_TEMPLATE.format(header=self.HTML_HEADER, env=self.env, code=self.output_alectryon, code_raw=self.output_yaml)
 
-    def _get_annotated_html(self, output_dict):
+    def _get_annotated_html(self, input, output_dict):
         highlighter = make_highlighter("html", "lean4") # coq, pygments_style)
         sentences = []
-        cmd = output_dict["sent"]['cmd']
+        cmd = input.info['cmd']
         for line_no, cmd_line in enumerate(cmd.split('\n'), start=1):
             messages = [] # [Message(contents=f'This is line {line_no}')]
             if line_no in self.message_dict:
