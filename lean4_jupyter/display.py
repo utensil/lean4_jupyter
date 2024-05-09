@@ -115,7 +115,7 @@ class Lean4ReplOutputDisplay:
     def _render_message(self, msg):
         EMOJI_DICT = {
             'info': '',
-            'warning': '⚠️',
+            'warning': '🟨',
             'error': '❌'
         }
         return f'''{EMOJI_DICT[msg['severity']]} {msg['data']}'''
