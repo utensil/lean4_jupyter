@@ -1,25 +1,31 @@
-from typing import Any, Dict, DefaultDict, Optional, Tuple, Union, NamedTuple, NoReturn
+from typing import Any, Dict, DefaultDict, Optional, Tuple, Union, NamedTuple  # noqa: F401
 from pexpect import EOF
 import pexpect
-from collections import namedtuple
+from dataclasses import dataclass
 from subprocess import check_output
 import json
 
-Lean4ReplInput = namedtuple('Lean4ReplInput', 'raw info')
+
+@dataclass
+class Lean4ReplInput:
+    raw: str
+    info: Dict[str, Any]
+
 
 class Lean4ReplIO:
-    def __init__(self, input_raw, output_raw):
+    def __init__(self, input_raw: str, output_raw: str):
         self.input = Lean4ReplInput(input_raw, json.loads(input_raw))
         self.output = Lean4ReplOutput(output_raw, self.input)
 
+
 class Lean4ReplOutput:
-    def __init__(self, output_raw, input: Lean4ReplInput):
+    def __init__(self, output_raw: str, input: Lean4ReplInput):
         self.raw = output_raw
         self.input = input
         self.info = json.loads(output_raw)
         self.env = self.info["env"]
 
-# Based on https://github.com/zhangir-azerbayev/pySagredo/blob/main/pysagredo/gym/__init__.py
+
 class Lean4ReplWrapper:
 
     def __init__(self):
@@ -39,29 +45,24 @@ class Lean4ReplWrapper:
         try:
             check_output(['lean', '--version'])
         except FileNotFoundError:
-            raise FileNotFoundError("Lean is not installed. Please install Lean before using this kernel.")     
-    
+            raise FileNotFoundError(
+                "Lean is not installed. Please install Lean before using this kernel."
+            )
+
     def run_command(self, code, timeout=20):
         repl = self.repl
         command_dict = {
                 "cmd": code,
                 "env": self.env
-        } # [1:-1] removes single quotes
+        }
 
         command = json.dumps(command_dict)
         repl.sendline(command)
-        # repl.expect_exact(command + "\r\n")
 
         repl.sendline()
-        # repl.expect_exact("\r\n")
         try:
-            index = repl.expect_list(self.expect_patterns, timeout=timeout)
-            output = repl.before # + repl.match.group()
-            output_dict = json.loads(output)
-            # output_dict['sent_raw'] = command
-            output_dict['sent'] = command_dict
-            output_dict['recv_raw'] = output
-
+            repl.expect_list(self.expect_patterns, timeout=timeout)
+            output = repl.before  # + repl.match.group()
             repl_io = Lean4ReplIO(command, output)
 
             self.env = repl_io.output.env
@@ -70,7 +71,6 @@ class Lean4ReplWrapper:
             return repl_io
         except pexpect.exceptions.TIMEOUT:
             repl.sendintr()
-            interrupted = True
             return {"error": "FAILED DUE TO TIMEOUT", "buffer": repl.buffer}
         except KeyboardInterrupt:
             return {"error": "FAILED DUE TO KEYBOARD INTERRUPT", "buffer": repl.buffer}
