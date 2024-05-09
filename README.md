@@ -8,7 +8,7 @@ Early stage of development.
 
 What's working:
 
-- The kernel is able to execute Lean 4 commands and display the output using alectryon style annotation [01_basic.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/01_basic.ipynb)
+- The kernel is able to execute Lean 4 commands and echoes the input using alectryon style annotation [01_basic.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/01_basic.ipynb) with output messages.
 
 ## Installation
 
@@ -75,4 +75,4 @@ jupyter console --kernel lean4
 - [pySagredo](https://github.com/zhangir-azerbayev/pySagredo) (see also [repl#5](https://github.com/leanprover-community/repl/pull/5))
 - [LeanDojo](https://github.com/lean-dojo/LeanDojo)
 - [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library)
-- [lean-lsp](https://github.com/utensil/lean-lsp) (My previous attempt to make Lean 4 Jupyter kernel)
+- [lean-lsp](https://github.com/utensil/lean-lsp) (My previous attempt to make a Lean 4 Jupyter kernel using Lean 4 LSP server)
