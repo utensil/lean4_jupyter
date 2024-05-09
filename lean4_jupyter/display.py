@@ -22,22 +22,9 @@ class Lean4ReplOutputDisplay:
                 }
             }
 
-            .lj-msg-info {
-                background-color: #f0f0f0;
-                border-left: 4px solid #4CAF50;
-                padding: 8px;
-            }
-
-            .lj-msg-warning {
-                background-color: #f0f0f0;
-                border-left: 4px solid #FF9800;
-                padding: 8px;
-            }
-
-            .lj-msg-error {
-                background-color: #f0f0f0;
-                border-left: 4px solid #f44336;
-                padding: 8px;
+            .highlight .w, .code .w {
+                color: #d3d7cf;
+                text-decoration: none;
             }
         </style>
     '''
