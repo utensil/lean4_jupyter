@@ -41,13 +41,15 @@ class Lean4ReplWrapper:
         ])
 
     def check(self):
-        # check if Lean is installed
         try:
+            # check if Lean is installed
             check_output(['lean', '--version'])
+            # check if repl is installed
+            check_output(["/bin/sh", "-c",
+                          '''echo '{"cmd": "#eval Lean.versionString"}'|repl'''])
         except FileNotFoundError:
-            raise FileNotFoundError(
-                "Lean is not installed. Please install Lean before using this kernel."
-            )
+            raise RuntimeError("lean or repl is not properly installed, please follow README in "
+                               "https://github.com/utensil/lean4_jupyter to install them.")
 
     def run_command(self, code, timeout=-1):
         repl = self.repl
