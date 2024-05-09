@@ -36,14 +36,14 @@ class Lean4ReplOutputDisplay:
         </div>
         <details>
             <summary>Details</summary>
-            <p>State: <pre>{state}</pre></p>
+            <p>State: <code>{state}</code></p>
             <details>
                 <summary>Raw input</summary>
-                <pre>{input_raw}</pre>
+                <code>{input_raw}</code>
             </details>
             <details>
                 <summary>Raw output</summary>
-                <pre>{output_raw}</pre>
+                <code>{output_raw}</code>
             </details>
         </details>
     '''
@@ -64,8 +64,8 @@ class Lean4ReplOutputDisplay:
             header=self.HTML_HEADER,
             state=f'--% e-{output.env}',
             code=self.output_alectryon,
-            input_raw=yaml.safe_dump(output.input.info),
-            output_raw=self.output_yaml
+            input_raw=self.output.input.raw,  # yaml.safe_dump(output.input.info),
+            output_raw=self.output.raw  # self.output_yaml
         )
 
     def _get_annotated_html(self, input, output_dict):
