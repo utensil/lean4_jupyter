@@ -49,7 +49,7 @@ class Lean4ReplWrapper:
                 "Lean is not installed. Please install Lean before using this kernel."
             )
 
-    def run_command(self, code, timeout=20):
+    def run_command(self, code, timeout=-1):
         repl = self.repl
         command_dict = {
                 "cmd": code,
