@@ -1,3 +1,4 @@
+from typing import Any, Dict, DefaultDict, Optional, Tuple, Union, NamedTuple, NoReturn
 from ipykernel.kernelbase import Kernel
 
 from subprocess import check_output
@@ -6,8 +7,8 @@ import os.path
 import re
 import signal
 
-from .repl import Lean4ReplWrapper
-from .display import Lean4ReplOutput
+from .repl import Lean4ReplOutput, Lean4ReplWrapper
+from .display import Lean4ReplOutputDisplay
 
 __version__ = '0.0.1'
 
@@ -52,13 +53,13 @@ class Lean4Kernel(Kernel):
             signal.signal(signal.SIGINT, old_sigint_handler)
             signal.signal(signal.SIGPIPE, old_sigpipe_handler)
 
-    def process_output(self, output):
-        o = output
+    def process_output(self, output: Lean4ReplOutput):
+        o = Lean4ReplOutputDisplay(output)
         # https://jupyterbook.org/en/stable/content/code-outputs.html#render-priority
         self.send_response(self.iopub_socket, 'display_data', {
             'metadata': {},
             'data': {
-                'text/plain': o.raw,
+                'text/plain': o.plain(),
                 'text/html': o.html()
             }
         })

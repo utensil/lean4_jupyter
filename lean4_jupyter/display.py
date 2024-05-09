@@ -1,11 +1,12 @@
+from typing import Any, Dict, DefaultDict, Optional, Tuple, Union, NamedTuple, NoReturn
 from alectryon.core import Goal, Hypothesis, Message, Sentence, Text
 from alectryon.serapi import annotate
 from alectryon.pygments import make_highlighter
 from alectryon.html import HtmlGenerator, HEADER
-import json
 import yaml
+from .repl import Lean4ReplOutput
 
-class Lean4ReplOutput:
+class Lean4ReplOutputDisplay:
 
     HTML_HEADER = '''
         <link rel="stylesheet" href="https://lean-lang.org/lean4/doc/alectryon.css">
@@ -53,22 +54,19 @@ class Lean4ReplOutput:
         </div>
     '''
 
-    def __init__(self, output_raw, input):
-        self.raw = output_raw
-        self.input = input
-        output_dict = json.loads(output_raw)
-        self.message_dict = self._index_messages(output_dict)
+    def __init__(self, output : Lean4ReplOutput):
+        self.output = output
+        self.message_dict = self._index_messages(self.output.info)
+        self.output_yaml = yaml.safe_dump(self.output.info)
 
-        self.env = output_dict["env"]
-        
-        self.output_dict = output_dict
-        self.output_dict['message_dict'] = self.message_dict
-        self.output_yaml = yaml.safe_dump(self.output_dict)
+    def plain(self):
+        return self.output.raw
 
     def html(self):
-        fragments = self._get_annotated_html(self.input, self.output_dict)
+        output = self.output
+        fragments = self._get_annotated_html(output.input, output.info)
         self.output_alectryon = '\n'.join([fragment.render() for fragment in fragments])
-        return self.HTML_TEMPLATE.format(header=self.HTML_HEADER, env=self.env, code=self.output_alectryon, code_raw=self.output_yaml)
+        return self.HTML_TEMPLATE.format(header=self.HTML_HEADER, env=output.env, code=self.output_alectryon, code_raw=self.output_yaml)
 
     def _get_annotated_html(self, input, output_dict):
         highlighter = make_highlighter("html", "lean4") # coq, pygments_style)

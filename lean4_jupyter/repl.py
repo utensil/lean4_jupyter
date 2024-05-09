@@ -1,9 +1,9 @@
+from typing import Any, Dict, DefaultDict, Optional, Tuple, Union, NamedTuple, NoReturn
 from pexpect import EOF
 import pexpect
 from collections import namedtuple
 from subprocess import check_output
 import json
-from .display import Lean4ReplOutput
 
 Lean4ReplInput = namedtuple('Lean4ReplInput', 'raw info')
 
@@ -11,6 +11,13 @@ class Lean4ReplIO:
     def __init__(self, input_raw, output_raw):
         self.input = Lean4ReplInput(input_raw, json.loads(input_raw))
         self.output = Lean4ReplOutput(output_raw, self.input)
+
+class Lean4ReplOutput:
+    def __init__(self, output_raw, input: Lean4ReplInput):
+        self.raw = output_raw
+        self.input = input
+        self.info = json.loads(output_raw)
+        self.env = self.info["env"]
 
 # Based on https://github.com/zhangir-azerbayev/pySagredo/blob/main/pysagredo/gym/__init__.py
 class Lean4ReplWrapper:
