@@ -44,14 +44,21 @@ class Lean4ReplOutputDisplay:
 
     HTML_TEMPLATE = '''
         {header}
-        <p>Environment: {env}</p>
         <div class="alectryon-root alectryon-centered">
             {code}
+        </div>
+        <details>
+            <summary>Details</summary>
+            <p>State: <pre>{state}</pre></p>
+            <details>
+                <summary>Raw input</summary>
+                <pre>{input_raw}</pre>
+            </details>
             <details>
                 <summary>Raw output</summary>
-                <pre>{code_raw}</pre>
+                <pre>{output_raw}</pre>
             </details>
-        </div>
+        </details>
     '''
 
     def __init__(self, output: Lean4ReplOutput):
@@ -68,9 +75,10 @@ class Lean4ReplOutputDisplay:
         self.output_alectryon = '\n'.join([fragment.render() for fragment in fragments])
         return self.HTML_TEMPLATE.format(
             header=self.HTML_HEADER,
-            env=output.env,
+            state=f'--% e-{output.env}',
             code=self.output_alectryon,
-            code_raw=self.output_yaml
+            input_raw=yaml.safe_dump(output.input.info),
+            output_raw=self.output_yaml
         )
 
     def _get_annotated_html(self, input, output_dict):
