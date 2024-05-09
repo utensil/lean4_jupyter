@@ -1,4 +1,4 @@
-from typing import Any, Dict, DefaultDict, Optional, Tuple, Union, NamedTuple, NoReturn
+from typing import Any, Dict, DefaultDict, Optional, Tuple, Union, NamedTuple  # noqa: F401
 from ipykernel.kernelbase import Kernel
 
 from subprocess import check_output
@@ -17,6 +17,7 @@ __lean4_jupyter_dir__ = os.path.join(os.path.expanduser('~'), '.lean4_jupyter')
 
 # Lean (version 4.8.0-rc1, aarch64-apple-darwin, commit dcccfb73cb24, Release)
 version_pat = re.compile(r'version (\d+(\.\d+)+(-rc\d+)?)')
+
 
 class Lean4Kernel(Kernel):
     implementation = 'lean4_jupyter'
@@ -71,4 +72,4 @@ class Lean4Kernel(Kernel):
         self.process_output(repl_io.output)
 
         return {'status': 'ok', 'execution_count': self.execution_count,
-                    'payload': [], 'user_expressions': {}}
+                'payload': [], 'user_expressions': {}}

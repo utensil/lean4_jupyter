@@ -8,17 +8,18 @@ import shutil
 from jupyter_client.kernelspec import KernelSpecManager
 from IPython.utils.tempdir import TemporaryDirectory
 from .resources import _ICON_PATH
-
-kernel_json = {"argv":[sys.executable,"-m","lean4_jupyter", "-f", "{connection_file}"],
- "display_name":"Lean 4",
- "language":"lean4",
- "codemirror_mode":"python", # TODO: fix code mirror mode
-#  "env":{"PS1": "$"}
+kernel_json = {
+    "argv": [sys.executable, "-m", "lean4_jupyter", "-f", "{connection_file}"],
+    "display_name": "Lean 4",
+    "language": "lean4",
+    "codemirror_mode": "python"  # TODO: fix code mirror mode
+    # "env": {"PS1": "$"}
 }
+
 
 def install_my_kernel_spec(user=True, prefix=None):
     with TemporaryDirectory() as td:
-        os.chmod(td, 0o755) # Starts off as 700, not user readable
+        os.chmod(td, 0o755)  # Starts off as 700, not user readable
         with open(os.path.join(td, 'kernel.json'), 'w') as f:
             json.dump(kernel_json, f, sort_keys=True)
         shutil.copyfile(
@@ -28,11 +29,13 @@ def install_my_kernel_spec(user=True, prefix=None):
         print('Installing IPython kernel spec')
         KernelSpecManager().install_kernel_spec(td, 'lean4', user=user, prefix=prefix)
 
+
 def _is_root():
     try:
         return os.geteuid() == 0
     except AttributeError:
-        return False # assume not an admin on non-Unix platforms
+        return False  # assume not an admin on non-Unix platforms
+
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
@@ -69,6 +72,7 @@ def main(argv=None):
         user = True
 
     install_my_kernel_spec(user=user, prefix=prefix)
+
 
 if __name__ == '__main__':
     main()
