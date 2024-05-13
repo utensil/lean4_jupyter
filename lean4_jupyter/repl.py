@@ -39,6 +39,9 @@ class Lean4ReplOutput:
         if "sorries" in self.info:
             self.proofStates = [goal["proofState"] for goal in self.info["sorries"]]
 
+        if "proofState" in self.info:
+            self.proofStates.append(self.info["proofState"])
+
 
 class Lean4ReplWrapper:
 
@@ -74,6 +77,9 @@ class Lean4ReplWrapper:
         matched_proof = re.match(r'^--% proof', code)
         if matched_proof:
             return self.state
+        
+        env = self.state.env
+        proofStates = self.state.proofStates
 
         # if code is specified with --% e-<env> or --% p-<proofState>,
         # then use the specified env and proofState
@@ -81,9 +87,7 @@ class Lean4ReplWrapper:
         if matched:
             if matched.group(2) is not None:
                 env = int(matched.group(2))
-                proofStates = []
             if matched.group(3) is not None:
-                env = None
                 proofStates = [int(matched.group(3))]
 
             return Lean4ReplState(env=env, proofStates=proofStates)
@@ -102,13 +106,15 @@ class Lean4ReplWrapper:
                     "cmd": code,
                     "env": env
             }
-
         else:
             # {"tactic": "apply Int.natAbs", "proofState": 0}
             input_dict = {
                 "tactic": code,
                 "proofState": max(state.proofStates)
             }
+
+        # update the state as parsed before sending the input
+        self.state = state
         input = json.dumps(input_dict)
         repl.sendline(input)
 
@@ -118,12 +124,14 @@ class Lean4ReplWrapper:
             output = repl.before  # + repl.match.group()
             repl_io = Lean4ReplIO(input, output)
 
+            env = repl_io.output.env if repl_io.output.env is not None else self.state.env
+
             self.state = Lean4ReplState(
-                env=repl_io.output.env, proofStates=repl_io.output.proofStates)
+                env=env, proofStates=repl_io.output.proofStates)
 
             # TODO: for now, this would overwrite the previous command executed for the same env
             # Instead, this should be stored in a graph, thus could be displayed by a magic
-            self.commands[repl_io.output.env] = input_dict
+            self.commands[env] = input_dict
 
             return repl_io
         # TODO the following should be rewritten to emit not dicts

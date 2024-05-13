@@ -63,6 +63,15 @@ class Lean4ReplOutputDisplay:
 
     def plain(self):
         return self.output.raw
+    
+    def get_state_magic(self, output):
+        if len(output.proofStates) > 0:
+            return f'--% p-{max(output.proofStates)}'
+        elif output.env is not None:
+            return f'--% e-{output.env}'
+        else:
+            # unreachable
+            return ''
 
     def html(self):
         output = self.output
@@ -70,7 +79,7 @@ class Lean4ReplOutputDisplay:
         self.output_alectryon = '\n'.join([fragment.render() for fragment in fragments])
         return self.HTML_TEMPLATE.format(
             header=self.HTML_HEADER,
-            state=f'--% e-{output.env}',  # p-{json.dumps(output.proofStates)}',
+            state=self.get_state_magic(output),
             code=self.output_alectryon,
             input_raw=self.output.input.raw,  # yaml.safe_dump(output.input.info),
             output_raw=self.output.raw,  # self.output_yaml,
@@ -99,6 +108,12 @@ class Lean4ReplOutputDisplay:
             if line_no in self.message_dict:
                 for msg in self.message_dict[line_no]:
                     messages.append(Message(contents=self._render_message(msg)))
+            # TODO: figure out why this is 0
+            # This happens for tactics like `exact?` that output suggestions
+            if line_no == last_line_no and 0 in self.message_dict:
+                for msg in self.message_dict[0]:
+                    messages.append(Message(contents=self._render_message(msg)))
+            # For errors with no lineno, for goals accomplished
             if line_no == last_line_no and -1 in self.message_dict:
                 for msg in self.message_dict[-1]:
                     messages.append(Message(contents=self._render_message(msg)))
