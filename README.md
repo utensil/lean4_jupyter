@@ -8,7 +8,7 @@ Early stage of development.
 
 What's working:
 
-- The kernel is able to execute Lean 4 commands/tatics, and echoes the input using alectryon style annotation with output messages, see [00_tutorial.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb).
+- The kernel is able to execute Lean 4 commands/tatics, and echoes the input using alectryon style annotation with output messages, see [00_tutorial.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true).
 
 ## Installation
 
