@@ -4,7 +4,7 @@ from alectryon.pygments import make_highlighter
 from alectryon.html import HtmlGenerator
 import yaml
 # import json
-from .repl import Lean4ReplOutput
+from .repl import Lean4ReplOutput, Lean4ReplState
 
 
 class Lean4ReplOutputDisplay:
@@ -56,19 +56,21 @@ class Lean4ReplOutputDisplay:
         </details>
     '''
 
-    def __init__(self, output: Lean4ReplOutput):
+    def __init__(self, output: Lean4ReplOutput, state: Lean4ReplState = None):
         self.output = output
+        self.state = state if state is not None else Lean4ReplState(
+            env=output.env, proofStates=output.proofStates)
         self.message_dict = self._index_messages(self.output.info)
         self.output_yaml = yaml.safe_dump(self.output.info)
 
     def plain(self):
         return self.output.raw
-    
-    def get_state_magic(self, output):
-        if len(output.proofStates) > 0:
-            return f'--% p-{max(output.proofStates)}'
-        elif output.env is not None:
-            return f'--% e-{output.env}'
+
+    def get_state_magic(self, state):
+        if len(state.proofStates) > 0:
+            return f'--% p-{max(state.proofStates)}'
+        elif state.env is not None:
+            return f'--% e-{state.env}'
         else:
             # unreachable
             return ''
@@ -79,7 +81,7 @@ class Lean4ReplOutputDisplay:
         self.output_alectryon = '\n'.join([fragment.render() for fragment in fragments])
         return self.HTML_TEMPLATE.format(
             header=self.HTML_HEADER,
-            state=self.get_state_magic(output),
+            state=self.get_state_magic(self.state),
             code=self.output_alectryon,
             input_raw=self.output.input.raw,  # yaml.safe_dump(output.input.info),
             output_raw=self.output.raw,  # self.output_yaml,

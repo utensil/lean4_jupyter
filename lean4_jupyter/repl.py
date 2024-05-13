@@ -77,7 +77,7 @@ class Lean4ReplWrapper:
         matched_proof = re.match(r'^--% proof', code)
         if matched_proof:
             return self.state
-        
+
         env = self.state.env
         proofStates = self.state.proofStates
 

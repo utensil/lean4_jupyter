@@ -56,7 +56,8 @@ class Lean4Kernel(Kernel):
             signal.signal(signal.SIGPIPE, old_sigpipe_handler)
 
     def process_output(self, output: Lean4ReplOutput):
-        o = Lean4ReplOutputDisplay(output)
+        # TODO make input/output contain state
+        o = Lean4ReplOutputDisplay(output, self.leanwrapper.state)
         # https://jupyterbook.org/en/stable/content/code-outputs.html#render-priority
         self.send_response(self.iopub_socket, 'display_data', {
             'metadata': {},
