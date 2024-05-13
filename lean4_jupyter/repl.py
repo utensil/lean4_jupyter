@@ -4,6 +4,7 @@ import pexpect
 from dataclasses import dataclass
 from subprocess import check_output
 import json
+import re
 
 
 @dataclass
@@ -51,11 +52,31 @@ class Lean4ReplWrapper:
             raise RuntimeError("lean or repl is not properly installed, please follow README in "
                                "https://github.com/utensil/lean4_jupyter to install them.")
 
+    def comment_out_native_magic(self, code):
+        # replace string matching regrex ^% with --%
+        return re.sub(r'^%', '--%', code)
+
+    def parse_state_magic(self, code):
+        matched = re.match(r'^--% e-(\d+)( p-(\d+))?', code)
+        if matched:
+            env = int(matched.group(1))
+            return {
+                "env": env
+            }
+
+        return {}
+
     def run_command(self, code, timeout=-1):
+        code = self.comment_out_native_magic(code)
+        state = self.parse_state_magic(code)
+        env = self.env
+        if 'env' in state:
+            env = state['env']
+
         repl = self.repl
         command_dict = {
                 "cmd": code,
-                "env": self.env
+                "env": env
         }
 
         command = json.dumps(command_dict)

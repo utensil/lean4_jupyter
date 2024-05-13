@@ -6,6 +6,7 @@ import os.path
 
 import re
 import signal
+import yaml
 
 from .repl import Lean4ReplOutput, Lean4ReplWrapper
 from .display import Lean4ReplOutputDisplay
@@ -69,6 +70,19 @@ class Lean4Kernel(Kernel):
                    user_expressions=None, allow_stdin=False):
         # try:
         repl_io = self.leanwrapper.run_command(code, timeout=None)
+
+        # TODO move this to repl or display
+        if isinstance(repl_io, dict):
+            self.send_response(self.iopub_socket, 'display_data', {
+                'metadata': {},
+                'data': {
+                    'text/plain': yaml.safe_dump(repl_io),
+                    'text/html': f'<pre>{yaml.safe_dump(repl_io)}</pre>'
+                }
+            })
+            return {'status': 'error', 'execution_count': self.execution_count,
+                    'ename': 'Error', 'evalue': 'Error', 'traceback': ['Error']}
+
         self.process_output(repl_io.output)
 
         return {'status': 'ok', 'execution_count': self.execution_count,
