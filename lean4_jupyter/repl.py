@@ -30,7 +30,11 @@ class Lean4ReplOutput:
         self.raw = output_raw
         self.input = input
         self.info = json.loads(output_raw)
-        self.env = self.info["env"]
+
+        self.env = None
+        if "env" in self.info:
+            self.env = self.info["env"]
+
         self.proofStates = []
         if "sorries" in self.info:
             self.proofStates = [goal["proofState"] for goal in self.info["sorries"]]
@@ -69,15 +73,17 @@ class Lean4ReplWrapper:
         # if code starts with --% proof, then use the last proofStates
         matched_proof = re.match(r'^--% proof', code)
         if matched_proof:
-            return self.proofStates
+            return self.state
 
-        # if code is specified with --% e-<env> p-<proofState>, 
+        # if code is specified with --% e-<env> or --% p-<proofState>,
         # then use the specified env and proofState
-        matched = re.match(r'^--% e-(\d+)( p-(\d+))?', code)
+        matched = re.match(r'^--% (e-(\d+)|p-(\d+))?', code)
         if matched:
-            env = int(matched.group(1))
-            proofStates = []
+            if matched.group(2) is not None:
+                env = int(matched.group(2))
+                proofStates = []
             if matched.group(3) is not None:
+                env = None
                 proofStates = [int(matched.group(3))]
 
             return Lean4ReplState(env=env, proofStates=proofStates)
@@ -91,26 +97,33 @@ class Lean4ReplWrapper:
         env = state.env
         repl = self.repl
 
-        command_dict = {
-                "cmd": code,
-                "env": env
-        }
+        if len(state.proofStates) == 0:
+            input_dict = {
+                    "cmd": code,
+                    "env": env
+            }
 
-        command = json.dumps(command_dict)
-        repl.sendline(command)
+        else:
+            # {"tactic": "apply Int.natAbs", "proofState": 0}
+            input_dict = {
+                "tactic": code,
+                "proofState": max(state.proofStates)
+            }
+        input = json.dumps(input_dict)
+        repl.sendline(input)
 
         repl.sendline()
         try:
             repl.expect_list(self.expect_patterns, timeout=timeout)
             output = repl.before  # + repl.match.group()
-            repl_io = Lean4ReplIO(command, output)
+            repl_io = Lean4ReplIO(input, output)
 
             self.state = Lean4ReplState(
                 env=repl_io.output.env, proofStates=repl_io.output.proofStates)
 
             # TODO: for now, this would overwrite the previous command executed for the same env
             # Instead, this should be stored in a graph, thus could be displayed by a magic
-            self.commands[repl_io.output.env] = command_dict
+            self.commands[repl_io.output.env] = input_dict
 
             return repl_io
         # TODO the following should be rewritten to emit not dicts

@@ -52,7 +52,7 @@ class Lean4ReplOutputDisplay:
             <details>
                 <summary>Raw output</summary>
                 <code>{output_raw}</code>
-            </details>
+            </details>{debug}
         </details>
     '''
 
@@ -73,17 +73,34 @@ class Lean4ReplOutputDisplay:
             state=f'--% e-{output.env}',  # p-{json.dumps(output.proofStates)}',
             code=self.output_alectryon,
             input_raw=self.output.input.raw,  # yaml.safe_dump(output.input.info),
-            output_raw=self.output.raw  # self.output_yaml
+            output_raw=self.output.raw,  # self.output_yaml,
+            debug=''
+            # '''
+            # <details>
+            #     <summary>Message Index</summary>
+            #     <code>{message_index}</code>
+            # </details>'''.format(message_index=yaml.safe_dump(self.message_dict))
         )
 
     def _get_annotated_html(self, input, output_dict):
         highlighter = make_highlighter("html", "lean4")  # coq, pygments_style)
         sentences = []
-        cmd = input.info['cmd']
-        for line_no, cmd_line in enumerate(cmd.split('\n'), start=1):
+        input_code = ''
+        if 'cmd' in input.info:
+            input_code = input.info['cmd']
+        elif 'tactic' in input.info:
+            input_code = input.info['tactic']
+        else:
+            raise ValueError(f'Invalid input: {input}')
+        input_code_lines = input_code.split('\n')
+        last_line_no = len(input_code_lines)
+        for line_no, cmd_line in enumerate(input_code_lines, start=1):
             messages = []  # [Message(contents=f'This is line {line_no}')]
             if line_no in self.message_dict:
                 for msg in self.message_dict[line_no]:
+                    messages.append(Message(contents=self._render_message(msg)))
+            if line_no == last_line_no and -1 in self.message_dict:
+                for msg in self.message_dict[-1]:
                     messages.append(Message(contents=self._render_message(msg)))
             sentence = Sentence(contents=cmd_line, messages=messages, goals=[])
             sentences.append([sentence])
@@ -126,6 +143,24 @@ class Lean4ReplOutputDisplay:
                     index[end_line].append(msg)
                 else:
                     raise ValueError(f'Invalid message: {msg}')
+        if 'message' in output_dict:
+            msg = output_dict['message']
+            # TODO: fix dup
+            if -1 not in index:
+                index[-1] = []
+                index[-1].append({
+                    'severity': 'error',
+                    'data': msg
+                })
+
+        if 'goals' in output_dict:
+            if len(output_dict['goals']) == 0:
+                if -1 not in index:
+                    index[-1] = []
+                    index[-1].append({
+                        'severity': 'info',
+                        'data': 'Goals accomplished! 🐙'
+                    })
         return index
 
     def _render_message(self, msg):
