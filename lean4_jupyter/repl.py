@@ -66,6 +66,13 @@ class Lean4ReplWrapper:
         return re.sub(r'^%', '--%', code)
 
     def parse_state_magic(self, code):
+        # if code starts with --% proof, then use the last proofStates
+        matched_proof = re.match(r'^--% proof', code)
+        if matched_proof:
+            return self.proofStates
+
+        # if code is specified with --% e-<env> p-<proofState>, 
+        # then use the specified env and proofState
         matched = re.match(r'^--% e-(\d+)( p-(\d+))?', code)
         if matched:
             env = int(matched.group(1))
@@ -75,15 +82,13 @@ class Lean4ReplWrapper:
 
             return Lean4ReplState(env=env, proofStates=proofStates)
 
-        return Lean4ReplState()
+        # By default, ignore proofStates, use the last env, assuming this is a new command
+        return Lean4ReplState(env=self.state.env)
 
     def run_command(self, code, timeout=-1):
         code = self.comment_out_native_magic(code)
         state = self.parse_state_magic(code)
-        env = self.state.env
-        if state.env is not None:
-            env = state.env
-
+        env = state.env
         repl = self.repl
 
         command_dict = {
