@@ -8,6 +8,12 @@ import re
 
 
 @dataclass
+class Lean4ReplState:
+    env: Optional[int]
+    proofStates: list[int]
+
+
+@dataclass
 class Lean4ReplInput:
     raw: str
     info: Dict[str, Any]
@@ -25,6 +31,7 @@ class Lean4ReplOutput:
         self.input = input
         self.info = json.loads(output_raw)
         self.env = self.info["env"]
+        self.proofStates = []
 
 
 class Lean4ReplWrapper:
@@ -32,7 +39,7 @@ class Lean4ReplWrapper:
     def __init__(self):
         self.check()
         self.repl = pexpect.spawn("repl", echo=False, encoding='utf-8', codec_errors='replace')
-        self.env = None
+        self.state = Lean4ReplState(None, [])
         self.commands = {}
         self.expect_patterns = self.repl.compile_pattern_list([
             '\r\n\r\n',
@@ -60,18 +67,16 @@ class Lean4ReplWrapper:
         matched = re.match(r'^--% e-(\d+)( p-(\d+))?', code)
         if matched:
             env = int(matched.group(1))
-            return {
-                "env": env
-            }
+            return Lean4ReplState(env=env, proofStates=[])
 
-        return {}
+        return Lean4ReplState(env=None, proofStates=[])
 
     def run_command(self, code, timeout=-1):
         code = self.comment_out_native_magic(code)
         state = self.parse_state_magic(code)
-        env = self.env
-        if 'env' in state:
-            env = state['env']
+        env = self.state.env
+        if state.env is not None:
+            env = state.env
 
         repl = self.repl
         command_dict = {
@@ -88,10 +93,15 @@ class Lean4ReplWrapper:
             output = repl.before  # + repl.match.group()
             repl_io = Lean4ReplIO(command, output)
 
-            self.env = repl_io.output.env
-            self.commands[self.env] = command_dict
+            self.state = Lean4ReplState(
+                env=repl_io.output.env, proofStates=repl_io.output.proofStates)
+            
+            # TODO: for now, this would overwrite the previous command executed for the same env
+            # Instead, this should be stored in a graph, thus could be displayed by a magic
+            self.commands[repl_io.output.env] = command_dict
 
             return repl_io
+        # TODO the following should be rewritten to emit not dicts
         except pexpect.exceptions.TIMEOUT:
             repl.sendintr()
             return {"error": "FAILED DUE TO TIMEOUT", "buffer": repl.buffer}
