@@ -3,6 +3,7 @@ from alectryon.core import Message, Sentence
 from alectryon.pygments import make_highlighter
 from alectryon.html import HtmlGenerator
 import yaml
+import json
 from .repl import Lean4ReplOutput
 
 
@@ -69,7 +70,7 @@ class Lean4ReplOutputDisplay:
         self.output_alectryon = '\n'.join([fragment.render() for fragment in fragments])
         return self.HTML_TEMPLATE.format(
             header=self.HTML_HEADER,
-            state=f'--% e-{output.env}',
+            state=f'--% e-{output.env} p-{json.dumps(output.proofStates)}',
             code=self.output_alectryon,
             input_raw=self.output.input.raw,  # yaml.safe_dump(output.input.info),
             output_raw=self.output.raw  # self.output_yaml

@@ -7,10 +7,10 @@ import json
 import re
 
 
-@dataclass
 class Lean4ReplState:
-    env: Optional[int]
-    proofStates: list[int]
+    def __init__(self, env: Optional[int] = None, proofStates: list[int] = []):
+        self.env = env
+        self.proofStates = proofStates
 
 
 @dataclass
@@ -32,6 +32,8 @@ class Lean4ReplOutput:
         self.info = json.loads(output_raw)
         self.env = self.info["env"]
         self.proofStates = []
+        if "sorries" in self.info:
+            self.proofStates = [goal["proofState"] for goal in self.info["sorries"]]
 
 
 class Lean4ReplWrapper:
@@ -39,7 +41,7 @@ class Lean4ReplWrapper:
     def __init__(self):
         self.check()
         self.repl = pexpect.spawn("repl", echo=False, encoding='utf-8', codec_errors='replace')
-        self.state = Lean4ReplState(None, [])
+        self.state = Lean4ReplState()
         self.commands = {}
         self.expect_patterns = self.repl.compile_pattern_list([
             '\r\n\r\n',
@@ -67,9 +69,13 @@ class Lean4ReplWrapper:
         matched = re.match(r'^--% e-(\d+)( p-(\d+))?', code)
         if matched:
             env = int(matched.group(1))
-            return Lean4ReplState(env=env, proofStates=[])
+            proofStates = []
+            if matched.group(3) is not None:
+                proofStates = [int(matched.group(3))]
 
-        return Lean4ReplState(env=None, proofStates=[])
+            return Lean4ReplState(env=env, proofStates=proofStates)
+
+        return Lean4ReplState()
 
     def run_command(self, code, timeout=-1):
         code = self.comment_out_native_magic(code)
@@ -79,6 +85,7 @@ class Lean4ReplWrapper:
             env = state.env
 
         repl = self.repl
+
         command_dict = {
                 "cmd": code,
                 "env": env
@@ -95,7 +102,7 @@ class Lean4ReplWrapper:
 
             self.state = Lean4ReplState(
                 env=repl_io.output.env, proofStates=repl_io.output.proofStates)
-            
+
             # TODO: for now, this would overwrite the previous command executed for the same env
             # Instead, this should be stored in a graph, thus could be displayed by a magic
             self.commands[repl_io.output.env] = command_dict
