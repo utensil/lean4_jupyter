@@ -26,6 +26,13 @@ class Lean4ReplOutputDisplay:
                 color: #d3d7cf;
                 text-decoration: none;
             }
+
+            body[data-jp-theme-light="false"] .alectryon-io .alectryon-goals,
+            body[data-jp-theme-light="false"] .alectryon-io .alectryon-messages,
+            body[data-jp-theme-light="false"] .alectryon-io .alectryon-goal,
+            body[data-jp-theme-light="false"] .alectryon-io .alectryon-message {
+                background: black;
+            }
         </style>
     '''
 
@@ -106,10 +113,18 @@ class Lean4ReplOutputDisplay:
         index = {}
         if 'messages' in output_dict:
             for msg in output_dict['messages']:
-                end_line = msg['endPos']['line']
-                if end_line not in index:
-                    index[end_line] = []
-                index[end_line].append(msg)
+                if 'endPos' in msg and msg['endPos'] is not None:
+                    end_line = msg['endPos']['line']
+                    if end_line not in index:
+                        index[end_line] = []
+                    index[end_line].append(msg)
+                elif 'pos' in msg and msg['pos'] is not None:
+                    end_line = msg['pos']['line']
+                    if end_line not in index:
+                        index[end_line] = []
+                    index[end_line].append(msg)
+                else:
+                    raise ValueError(f'Invalid message: {msg}')
         return index
 
     def _render_message(self, msg):
