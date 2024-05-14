@@ -83,12 +83,15 @@ class Lean4ReplWrapper:
 
         # if code is specified with --% env <env> or --% proof <proofState>,
         # then use the specified env and proofState
-        matched = re.match(r'^--%\s*(e(nv)?[- ]*(\d+)|p(roof|rove)?[- ]*-(\d+))?', code)
+        matched = re.match(
+            r'^--%\s*(e(nv)?[- ]*(?P<env>\d+)|p(roof|rove)?[- ]*(?P<prove>\d+))?', code)
         if matched:
-            if matched.group(3) is not None:
-                env = int(matched.group(3))
-            if matched.group(5) is not None:
-                proofStates = [int(matched.group(5))]
+            matched_env = matched.group('env')
+            matched_prove = matched.group('prove')
+            if matched_env is not None:
+                env = int(matched_env)
+            if matched_prove is not None:
+                proofStates = [int(matched_prove)]
 
             return Lean4ReplState(env=env, proofStates=proofStates)
 
