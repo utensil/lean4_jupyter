@@ -66,14 +66,14 @@ class Lean4ReplOutputDisplay:
     def plain(self):
         return self.output.raw
 
-    def get_state_magic(self, state):
+    def get_state_magics(self, state):
+        magics = []
         if len(state.proofStates) > 0:
-            return f'--% p-{max(state.proofStates)}'
-        elif state.env is not None:
-            return f'--% e-{state.env}'
-        else:
-            # unreachable
-            return ''
+            magics.append(f'--% prove {max(state.proofStates)}')
+        if state.env is not None:
+            magics.append(f'--% env {state.env}')
+
+        return magics
 
     def html(self):
         output = self.output
@@ -81,7 +81,7 @@ class Lean4ReplOutputDisplay:
         self.output_alectryon = '\n'.join([fragment.render() for fragment in fragments])
         return self.HTML_TEMPLATE.format(
             header=self.HTML_HEADER,
-            state=self.get_state_magic(self.state),
+            state='\n'.join(self.get_state_magics(self.state)),
             code=self.output_alectryon,
             input_raw=self.output.input.raw,  # yaml.safe_dump(output.input.info),
             output_raw=self.output.raw,  # self.output_yaml,
@@ -121,6 +121,9 @@ class Lean4ReplOutputDisplay:
                     messages.append(Message(contents=self._render_message(msg)))
             sentence = Sentence(contents=cmd_line, messages=messages, goals=[])
             sentences.append([sentence])
+
+        for magic in self.get_state_magics(self.state):
+            sentences.append([Sentence(contents=magic, messages=[], goals=[])])
 
         g = HtmlGenerator(highlighter=highlighter)
         return g.gen(sentences)
