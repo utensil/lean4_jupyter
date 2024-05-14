@@ -68,27 +68,27 @@ class Lean4ReplWrapper:
             raise RuntimeError("lean or repl is not properly installed, please follow README in "
                                "https://github.com/utensil/lean4_jupyter to install them.")
 
-    def comment_out_native_magic(self, code):
+    def comment_out_magic(self, code):
         # replace string matching regrex ^% with --%
         return re.sub(r'^%', '--%', code)
 
     def parse_state_magic(self, code):
         # if code starts with --% proof, then use the last proofStates
-        matched_proof = re.match(r'^--% proof', code)
+        matched_proof = re.match(r'^--% proof[^0-9]*\n', code)
         if matched_proof:
             return self.state
 
         env = self.state.env
         proofStates = self.state.proofStates
 
-        # if code is specified with --% e-<env> or --% p-<proofState>,
+        # if code is specified with --% env <env> or --% proof <proofState>,
         # then use the specified env and proofState
-        matched = re.match(r'^--% (e-(\d+)|p-(\d+))?', code)
+        matched = re.match(r'^--%\s*(e(nv)?[- ]*(\d+)|p(roof|rove)?[- ]*-(\d+))?', code)
         if matched:
-            if matched.group(2) is not None:
-                env = int(matched.group(2))
             if matched.group(3) is not None:
-                proofStates = [int(matched.group(3))]
+                env = int(matched.group(3))
+            if matched.group(5) is not None:
+                proofStates = [int(matched.group(5))]
 
             return Lean4ReplState(env=env, proofStates=proofStates)
 
@@ -96,7 +96,7 @@ class Lean4ReplWrapper:
         return Lean4ReplState(env=self.state.env)
 
     def run_command(self, code, timeout=-1):
-        code = self.comment_out_native_magic(code)
+        code = self.comment_out_magic(code)
         state = self.parse_state_magic(code)
         env = state.env
         repl = self.repl
