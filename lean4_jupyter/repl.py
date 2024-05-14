@@ -47,7 +47,8 @@ class Lean4ReplWrapper:
 
     def __init__(self):
         self.check()
-        self.repl = pexpect.spawn("repl", echo=False, encoding='utf-8', codec_errors='replace')
+        self.repl = pexpect.spawn("lake env repl",
+                                  echo=False, encoding='utf-8', codec_errors='replace')
         self.state = Lean4ReplState()
         self.commands = {}
         self.expect_patterns = self.repl.compile_pattern_list([
@@ -76,8 +77,13 @@ class Lean4ReplWrapper:
         return re.sub(r'^%', '--%', code)
 
     def parse_state_magic(self, code):
+        # if code starts with --% env, then reset the environment
+        matched_env_reset = re.match(r'^--%\s*e(nv)?[^0-9]*\n', code)
+        if matched_env_reset:
+            return Lean4ReplState()
+
         # if code starts with --% proof, then use the last proofStates
-        matched_proof = re.match(r'^--% p(roof|rove)?[^0-9]*\n', code)
+        matched_proof = re.match(r'^--%\s*p(roof|rove)?[^0-9]*\n', code)
         if matched_proof:
             return self.state
 
@@ -109,9 +115,10 @@ class Lean4ReplWrapper:
 
         if len(state.proofStates) == 0:
             input_dict = {
-                    "cmd": code,
-                    "env": env
+                    "cmd": code
             }
+            if env is not None:
+                input_dict["env"] = env
         else:
             # {"tactic": "apply Int.natAbs", "proofState": 0}
             input_dict = {

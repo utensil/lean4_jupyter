@@ -21,12 +21,16 @@ Output:
 
 See it in action here: [00_tutorial.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true).
 
+The kernel also have preliminary support for running the notebook from the root of a Lean 4 project, so you can import modules declared in the `lakefile.lean` of the project, e.g. `Mathlib`.
+
+See it in action here: [demo.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/demo_proj/demo.ipynb?flush_cache=true).
+
 # What's next
 
 - Fix [repl#40](https://github.com/leanprover-community/repl/issues/40)
 - Add a CI based on [papermill](https://github.com/nteract/papermill/)
 - Improve UI in Jupyter Dark themes
-- Support loading a file, or running with `lake env` so the code can import packages.
+- Support loading a file.
 
 ## Installation
 
