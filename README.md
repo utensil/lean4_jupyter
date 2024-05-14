@@ -4,11 +4,15 @@ A Lean 4 Jupyter kernel via [REPL](https://github.com/leanprover-community/repl)
 
 ## Status
 
-Early stage of development.
+Alpha.
 
-What's working:
+The kernel is able to execute Lean 4 commands/tatics, and echoes the input using alectryon style annotation with output messages.
 
-- The kernel is able to execute Lean 4 commands/tatics, and echoes the input using alectryon style annotation with output messages, see [00_tutorial.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true).
+It's able to backtrack to earlier environment or proof states.
+
+See [00_tutorial.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true) for a walkthrough.
+
+It doesn't support loading a file yet, nor does it support importing (planned).
 
 ## Installation
 
