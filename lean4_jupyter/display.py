@@ -60,7 +60,16 @@ class Lean4ReplOutputDisplay:
         self.output_yaml = yaml.safe_dump(self.output.info)
 
     def plain(self):
-        return self.output.raw
+        output = self.output
+        sentences = self._get_annotated_sentences(output.input, output.info, column=True)
+        lines = []
+        for sentence in sentences:
+            for fragment in sentence:
+                lines.append(fragment.contents)
+                for message in fragment.messages:
+                    lines.append(message.contents)
+        raw = '\n\nRaw input:\n' + self.output.input.raw + '\nRaw output:\n' + self.output.raw
+        return '\n'.join(lines) + raw
 
     def get_state_magics(self, state):
         magics = []
@@ -89,7 +98,7 @@ class Lean4ReplOutputDisplay:
             # </details>'''.format(message_index=yaml.safe_dump(self.message_dict))
         )
     
-    def _get_annotated_sentences(self, input, output_dict):
+    def _get_annotated_sentences(self, input, output_dict, column=False):
         sentences = []
         input_code = ''
         if 'cmd' in input.info:
@@ -104,16 +113,16 @@ class Lean4ReplOutputDisplay:
             messages = []  # [Message(contents=f'This is line {line_no}')]
             if line_no in self.message_dict:
                 for msg in self.message_dict[line_no]:
-                    messages.append(Message(contents=self._render_message(msg)))
+                    messages.append(Message(contents=self._render_message(msg, column)))
             # TODO: figure out why this is 0
             # This happens for tactics like `exact?` that output suggestions
             if line_no == last_line_no and 0 in self.message_dict:
                 for msg in self.message_dict[0]:
-                    messages.append(Message(contents=self._render_message(msg)))
+                    messages.append(Message(contents=self._render_message(msg, column)))
             # For errors with no lineno, for goals accomplished
             if line_no == last_line_no and -1 in self.message_dict:
                 for msg in self.message_dict[-1]:
-                    messages.append(Message(contents=self._render_message(msg)))
+                    messages.append(Message(contents=self._render_message(msg, column)))
             sentence = Sentence(contents=cmd_line, messages=messages, goals=[])
             sentences.append([sentence])
 
@@ -184,11 +193,27 @@ class Lean4ReplOutputDisplay:
                     })
         return index
 
-    def _render_message(self, msg):
+    def _render_message(self, msg, column=False):
         EMOJI_DICT = {
             'info': '',
             'warning': '🟨',
             'error': '❌'
         }
-        return f'''{EMOJI_DICT[msg['severity']]} {msg['data']}'''
+
+        codespan = ''
+
+        bar = '─'
+
+        if column:
+            if 'endPos' in msg and msg['endPos'] is not None:
+                between = msg['endPos']['column'] - msg['pos']['column']
+                codespan = ' ' * (msg['pos']['column']) + bar * between
+            elif 'pos' in msg and msg['pos'] is not None:
+                codespan = bar * (msg['pos']['column'])
+            else:
+                codespan = ''
+
+            codespan += '▶ '
+
+        return f'''{codespan}{EMOJI_DICT[msg['severity']]} {msg['data']}'''
         # return f'''<div class="lj-msg-{msg['severity']}">{msg['data']}</div>'''

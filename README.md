@@ -12,14 +12,18 @@ The kernel already can:
 
 - execute Lean 4 commands
 - execute Lean 4 tatics with magic like `% proof` immediately after a `sorry`ed theorem
-- echoes the input using alectryon style annotation with output messages
 - backtrack to earlier environment or proof states with magic like `% env 1` or `% prove 3`
 
-See [00_tutorial.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true) for a walkthrough.
+Output:
+
+- In `jupyter notebook` and alike: echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style
+- In `jupyter console`: echos the input annotated in [codespan](https://github.com/brendanzab/codespan) style
+
+See it in action here: [00_tutorial.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true).
 
 # What's next
 
-- Format the plain output in `jupyter console --kernel lean4` in [codespan](https://github.com/brendanzab/codespan) style
+
 - Add a CI based on [papermill](https://github.com/nteract/papermill/)
 - Improve UI in Jupyter Dark themes
 - Support loading a file, or running with `lake env` so the code can import packages.
@@ -89,4 +93,5 @@ jupyter console --kernel lean4
 - [pySagredo](https://github.com/zhangir-azerbayev/pySagredo) (see also [repl#5](https://github.com/leanprover-community/repl/pull/5))
 - [LeanDojo](https://github.com/lean-dojo/LeanDojo)
 - [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library)
+- [codespan](https://github.com/brendanzab/codespan)
 - [lean-lsp](https://github.com/utensil/lean-lsp) (My previous attempt to make a Lean 4 Jupyter kernel using Lean 4 LSP server)
