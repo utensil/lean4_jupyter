@@ -14,6 +14,8 @@ See [00_tutorial.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/m
 
 It doesn't support loading a file yet, nor does it support importing (planned).
 
+It doesn't work well in Jupyter Dark themes yet (planned).
+
 ## Installation
 
 First, you need a working Lean 4 installation. You can install it via [elan](https://github.com/leanprover/elan).
