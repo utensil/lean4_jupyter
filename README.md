@@ -6,15 +6,23 @@ A Lean 4 Jupyter kernel via [REPL](https://github.com/leanprover-community/repl)
 
 Alpha.
 
-The kernel is able to execute Lean 4 commands/tatics, and echoes the input using alectryon style annotation with output messages.
+## What's already working
 
-It's able to backtrack to earlier environment or proof states.
+The kernel already can:
+
+- execute Lean 4 commands
+- execute Lean 4 tatics with magic like `% proof` immediately after a `sorry`ed theorem
+- echoes the input using alectryon style annotation with output messages
+- backtrack to earlier environment or proof states with magic like `% env 1` or `% prove 3`
 
 See [00_tutorial.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true) for a walkthrough.
 
-It doesn't support loading a file yet, nor does it support importing (planned).
+# What's next
 
-It doesn't work well in Jupyter Dark themes yet (planned).
+- Format the plain output in `jupyter console --kernel lean4` in [codespan](https://github.com/brendanzab/codespan) style
+- Add a CI based on [papermill](https://github.com/nteract/papermill/)
+- Improve UI in Jupyter Dark themes
+- Support loading a file, or running with `lake env` so the code can import packages.
 
 ## Installation
 
