@@ -25,7 +25,7 @@ The kernel also have preliminary support for running the notebook from the root 
 
 See it in action here: [demo.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/demo_proj/demo.ipynb?flush_cache=true).
 
-# What's next
+## What's next
 
 - Fix [repl#40](https://github.com/leanprover-community/repl/issues/40)
 - Add a CI based on [papermill](https://github.com/nteract/papermill/)
