@@ -17,7 +17,7 @@ The kernel already can:
 Output:
 
 - In `jupyter notebook` and alike: echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style
-- In `jupyter console`: echos the input annotated in [codespan](https://github.com/brendanzab/codespan) style
+- In `jupyter console` and alike: echos the input annotated in [codespan](https://github.com/brendanzab/codespan) style
 
 See it in action here: [00_tutorial.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true).
 
@@ -80,7 +80,7 @@ python -m lean4_jupyter.install
 To use it, run one of:
 
 ```bash
-# HTML UI
+# Web UI
 jupyter notebook
 jupyter lab
 
