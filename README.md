@@ -80,10 +80,15 @@ python -m lean4_jupyter.install
 To use it, run one of:
 
 ```bash
+# HTML UI
 jupyter notebook
 jupyter lab
-jupyter qtconsole --kernel lean4
+
+# Console UI
+# hint: use Ctrl-D and confirm with y to exit
 jupyter console --kernel lean4
+# hint: you need to run `pip install PyQt5 qtconsole` to install it
+jupyter qtconsole --kernel lean4
 ```
 
 ## Inspired by
