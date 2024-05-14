@@ -88,9 +88,8 @@ class Lean4ReplOutputDisplay:
             #     <code>{message_index}</code>
             # </details>'''.format(message_index=yaml.safe_dump(self.message_dict))
         )
-
-    def _get_annotated_html(self, input, output_dict):
-        highlighter = make_highlighter("html", "lean4")  # coq, pygments_style)
+    
+    def _get_annotated_sentences(self, input, output_dict):
         sentences = []
         input_code = ''
         if 'cmd' in input.info:
@@ -120,6 +119,12 @@ class Lean4ReplOutputDisplay:
 
         for magic in self.get_state_magics(self.state):
             sentences.append([Sentence(contents=magic, messages=[], goals=[])])
+
+        return sentences
+
+    def _get_annotated_html(self, input, output_dict):
+        highlighter = make_highlighter("html", "lean4")  # coq, pygments_style)
+        sentences = self._get_annotated_sentences(input, output_dict)
 
         g = HtmlGenerator(highlighter=highlighter)
         return g.gen(sentences)
