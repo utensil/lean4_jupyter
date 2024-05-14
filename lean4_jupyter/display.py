@@ -43,17 +43,13 @@ class Lean4ReplOutputDisplay:
             {code}
         </div>
         <details>
-            <summary>Details</summary>
-            <p>State: <code>{state}</code></p>
-            <details>
-                <summary>Raw input</summary>
-                <code>{input_raw}</code>
-            </details>
-            <details>
-                <summary>Raw output</summary>
-                <code>{output_raw}</code>
-            </details>{debug}
+            <summary>Raw input</summary>
+            <code>{input_raw}</code>
         </details>
+        <details>
+            <summary>Raw output</summary>
+            <code>{output_raw}</code>
+        </details>{debug}
     '''
 
     def __init__(self, output: Lean4ReplOutput, state: Lean4ReplState = None):
@@ -68,10 +64,11 @@ class Lean4ReplOutputDisplay:
 
     def get_state_magics(self, state):
         magics = []
-        if len(state.proofStates) > 0:
-            magics.append(f'--% prove {max(state.proofStates)}')
+
         if state.env is not None:
             magics.append(f'--% env {state.env}')
+        if len(state.proofStates) > 0:
+            magics.append(f'--% prove {max(state.proofStates)}')
 
         return magics
 
@@ -81,7 +78,6 @@ class Lean4ReplOutputDisplay:
         self.output_alectryon = '\n'.join([fragment.render() for fragment in fragments])
         return self.HTML_TEMPLATE.format(
             header=self.HTML_HEADER,
-            state='\n'.join(self.get_state_magics(self.state)),
             code=self.output_alectryon,
             input_raw=self.output.input.raw,  # yaml.safe_dump(output.input.info),
             output_raw=self.output.raw,  # self.output_yaml,
