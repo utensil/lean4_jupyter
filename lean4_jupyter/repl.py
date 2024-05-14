@@ -74,7 +74,7 @@ class Lean4ReplWrapper:
 
     def parse_state_magic(self, code):
         # if code starts with --% proof, then use the last proofStates
-        matched_proof = re.match(r'^--% proof[^0-9]*\n', code)
+        matched_proof = re.match(r'^--% p(roof|rove)?[^0-9]*\n', code)
         if matched_proof:
             return self.state
 
