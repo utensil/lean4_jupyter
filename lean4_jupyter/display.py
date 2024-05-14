@@ -97,7 +97,7 @@ class Lean4ReplOutputDisplay:
             #     <code>{message_index}</code>
             # </details>'''.format(message_index=yaml.safe_dump(self.message_dict))
         )
-    
+
     def _get_annotated_sentences(self, input, output_dict, column=False):
         sentences = []
         input_code = ''

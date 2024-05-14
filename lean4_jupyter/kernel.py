@@ -88,3 +88,7 @@ class Lean4Kernel(Kernel):
 
         return {'status': 'ok', 'execution_count': self.execution_count,
                 'payload': [], 'user_expressions': {}}
+
+    def do_shutdown(self, restart):
+        self.leanwrapper.shutdown()
+        return {'status': 'ok', 'restart': restart}

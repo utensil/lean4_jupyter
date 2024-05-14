@@ -57,6 +57,9 @@ class Lean4ReplWrapper:
             # pexpect.ExceptionPexpect
         ])
 
+    def shutdown(self):
+        self.repl.terminate(force=True)
+
     def check(self):
         try:
             # check if Lean is installed
@@ -142,6 +145,7 @@ class Lean4ReplWrapper:
             repl.sendintr()
             return {"error": "FAILED DUE TO TIMEOUT", "buffer": repl.buffer}
         except KeyboardInterrupt:
+            repl.sendintr()
             return {"error": "FAILED DUE TO KEYBOARD INTERRUPT", "buffer": repl.buffer}
         except EOF:
             return {"error": "FAILED DUE TO EOF", "buffer": repl.buffer}
