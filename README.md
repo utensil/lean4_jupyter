@@ -23,7 +23,7 @@ See it in action here: [00_tutorial.ipynb](https://nbviewer.org/github/utensil/l
 
 # What's next
 
-
+- Fix [repl#40](https://github.com/leanprover-community/repl/issues/40)
 - Add a CI based on [papermill](https://github.com/nteract/papermill/)
 - Improve UI in Jupyter Dark themes
 - Support loading a file, or running with `lake env` so the code can import packages.
