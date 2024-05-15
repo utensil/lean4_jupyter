@@ -48,10 +48,12 @@ they should output Lean/Lake versions, respectively.
 Then, you need to have a working `repl` in your `PATH`. You can build it from source:
 
 ```bash
+# rm -rf ~/.lean4_jupyter/repl
+# rm /usr/local/bin/repl
 mkdir -p ~/.lean4_jupyter
 git clone https://github.com/leanprover-community/repl ~/.lean4_jupyter/repl
-(cd ~/.lean4_jupyter/repl && echo '{ "cmd" : "def f := 2" }'|lake exe repl > /dev/null)
-mv ~/.lean4_jupyter/repl/.lake/build/bin/repl /usr/local/bin/
+(cd ~/.lean4_jupyter/repl && lake build)
+ln -s ~/.lean4_jupyter/repl/.lake/build/bin/repl /usr/local/bin/repl
 ```
 
 Verify that `repl` is working:
@@ -77,7 +79,7 @@ Then, install the kernel:
 ```bash
 pip install lean4_jupyter
 # or in development mode
-pip install -e .
+# pip install -e .
 python -m lean4_jupyter.install
 ```
 
