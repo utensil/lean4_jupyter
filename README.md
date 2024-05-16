@@ -11,10 +11,6 @@ A Lean 4 Jupyter kernel via [repl](https://github.com/leanprover-community/repl)
 [![Static Badge](https://img.shields.io/badge/test-nbval-purple)](https://github.com/computationalmodelling/nbval)
 [![Maintainability](https://api.codeclimate.com/v1/badges/666a7d45d436a598df2b/maintainability)](https://codeclimate.com/github/utensil/lean4_jupyter/maintainability)
 
-## Status
-
-Alpha.
-
 ## What's already working
 
 🔥 See it in action: [Tutorial notebook](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true).
