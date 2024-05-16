@@ -89,6 +89,13 @@ class Lean4ReplWrapper:
         return re.sub(r'^%', '--%', code)
 
     def run_magic(self, code, timeout):
+        # if code starts with --%load, load the file
+        matched_load = re.match(r'^--%\s*load\s+(?P<path>.*)\s*\n', code)
+        if matched_load:
+            path = matched_load.group('path')
+            repl_io = self.load_file(path, timeout)
+            return repl_io, self.handle_post_state(repl_io)
+
         return None, self.run_simple_magic(code, timeout)
 
     def run_simple_magic(self, code, timeout):
@@ -161,13 +168,15 @@ class Lean4ReplWrapper:
         # Instead, this should be stored in a graph, thus could be displayed by a magic
         self.commands[env] = repl_io.input.info
 
+        return self.state
+
     def run_command(self, code, timeout=-1):
         try:
             code = self.comment_out_magic(code)
 
             repl_io, state = self.run_magic(code, timeout)
+            # For heavy magic, ignore the rest of code
             if repl_io is not None:
-                self.handle_post_state(repl_io)
                 return repl_io
 
             env = state.env
