@@ -105,6 +105,8 @@ class Lean4ReplOutputDisplay:
             input_code = input.info['cmd']
         elif 'tactic' in input.info:
             input_code = input.info['tactic']
+        elif 'path' in input.info:
+            input_code = f'--% load {input.info["path"]}'
         else:
             raise ValueError(f'Invalid input: {input}')
         input_code_lines = input_code.split('\n')

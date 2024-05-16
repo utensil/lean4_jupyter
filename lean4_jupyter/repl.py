@@ -90,7 +90,7 @@ class Lean4ReplWrapper:
 
     def run_magic(self, code, timeout):
         # if code starts with --%load, load the file
-        matched_load = re.match(r'^--%\s*load\s+(?P<path>.*)\s*\n', code)
+        matched_load = re.match(r'^--%\s*load\s+(?P<path>[^\n]*)', code)
         if matched_load:
             path = matched_load.group('path')
             repl_io = self.load_file(path, timeout)
@@ -100,7 +100,7 @@ class Lean4ReplWrapper:
 
     def run_simple_magic(self, code, timeout):
         # if code starts with --%cd, change the working directory
-        matched_cd = re.match(r'^--%\s*cd\s+(?P<path>.*)\s*\n', code)
+        matched_cd = re.match(r'^--%\s*cd\s+(?P<path>[^\n]*)', code)
         if matched_cd:
             path = matched_cd.group('path')
             self.cd(path)
@@ -173,7 +173,6 @@ class Lean4ReplWrapper:
     def run_command(self, code, timeout=-1):
         try:
             code = self.comment_out_magic(code)
-
             repl_io, state = self.run_magic(code, timeout)
             # For heavy magic, ignore the rest of code
             if repl_io is not None:
