@@ -2,6 +2,13 @@
 
 A Lean 4 Jupyter kernel via [repl](https://github.com/leanprover-community/repl).
 
+[![PyPI](https://img.shields.io/pypi/v/lean4_jupyter.svg)](https://pypi.org/project/lean4_jupyter/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/lean4_jupyter.svg)](https://pypi.org/project/lean4_jupyter/)
+![PyPI - License](https://img.shields.io/pypi/l/lean4_jupyter)
+![PyPI - Status](https://img.shields.io/pypi/status/lean4_jupyter)
+[![Python CI](https://github.com/utensil/lean4_jupyter/actions/workflows/ci.yml/badge.svg)](https://github.com/utensil/lean4_jupyter/actions/workflows/ci.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/666a7d45d436a598df2b/maintainability)](https://codeclimate.com/github/utensil/lean4_jupyter/maintainability) 
+
 ## Status
 
 Alpha.

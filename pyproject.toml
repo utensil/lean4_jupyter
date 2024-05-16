@@ -14,12 +14,14 @@ dependencies = [
     "ipykernel",
     "alectryon"
 ]
+# https://pypi.org/classifiers/
 classifiers = [
     "Framework :: Jupyter",
-    "License :: OSI Approved :: BSD License",
+    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Operating System :: MacOS",
-    "Operating System :: POSIX :: Linux"
+    "Operating System :: POSIX :: Linux",
+    "Development Status :: 3 - Alpha"
 ]
 dynamic = ["version"]
 
