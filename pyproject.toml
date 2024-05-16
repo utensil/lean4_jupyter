@@ -27,3 +27,12 @@ dynamic = ["version"]
 
 [project.urls]
 Source = "https://github.com/utensil/lean4_jupyter"
+
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#a-full-example
+[project.optional-dependencies]
+test = [
+    "flake8",
+    "pytest",
+    "nbval",
+    "papermill"
+]

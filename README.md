@@ -7,7 +7,9 @@ A Lean 4 Jupyter kernel via [repl](https://github.com/leanprover-community/repl)
 ![PyPI - License](https://img.shields.io/pypi/l/lean4_jupyter)
 ![PyPI - Status](https://img.shields.io/pypi/status/lean4_jupyter)
 [![Python CI](https://github.com/utensil/lean4_jupyter/actions/workflows/ci.yml/badge.svg)](https://github.com/utensil/lean4_jupyter/actions/workflows/ci.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/666a7d45d436a598df2b/maintainability)](https://codeclimate.com/github/utensil/lean4_jupyter/maintainability) 
+[![lint - flake8](https://img.shields.io/badge/lint-flake8-blue)](https://github.com/PyCQA/flake8)
+[![Static Badge](https://img.shields.io/badge/test-nbval-purple)](https://github.com/computationalmodelling/nbval)
+[![Maintainability](https://api.codeclimate.com/v1/badges/666a7d45d436a598df2b/maintainability)](https://codeclimate.com/github/utensil/lean4_jupyter/maintainability)
 
 ## Status
 
@@ -36,7 +38,7 @@ Output:
 - Improve the alectryon annotation to support annotations in the middle of a line
 - Make magics like `%cd` and `%load` work more robustly
 - Support show `tactics` after `%load`
-- Add a CI based on [papermill](https://github.com/nteract/papermill/)
+- Add all `repl` test cases to the CI and set up coverage
 - Improve UI in Jupyter Dark themes
 - Minor code refactor to smooth things out
 
