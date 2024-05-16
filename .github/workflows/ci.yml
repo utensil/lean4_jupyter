@@ -69,6 +69,6 @@ jobs:
           python -m pip install flit
       - name: Build package distributions
         run: |
-          python -m flit --setup-py build
+          python -m flit build --setup-py
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
