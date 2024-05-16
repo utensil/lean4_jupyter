@@ -135,29 +135,28 @@ class Lean4ReplWrapper:
         return output
 
     def run_command(self, code, timeout=-1):
-        code = self.comment_out_magic(code)
-        state = self.run_magic(code)
-        env = state.env
-        repl = self.repl
-
-        if len(state.proofStates) == 0:
-            input_dict = {
-                    "cmd": code
-            }
-            if env is not None:
-                input_dict["env"] = env
-        else:
-            # {"tactic": "apply Int.natAbs", "proofState": 0}
-            input_dict = {
-                "tactic": code,
-                "proofState": max(state.proofStates)
-            }
-
-        # update the state as parsed before sending the input
-        self.state = state
-        input = json.dumps(input_dict)
-
         try:
+            code = self.comment_out_magic(code)
+            state = self.run_magic(code)
+            env = state.env
+            repl = self.repl
+
+            if len(state.proofStates) == 0:
+                input_dict = {
+                        "cmd": code
+                }
+                if env is not None:
+                    input_dict["env"] = env
+            else:
+                # {"tactic": "apply Int.natAbs", "proofState": 0}
+                input_dict = {
+                    "tactic": code,
+                    "proofState": max(state.proofStates)
+                }
+
+            # update the state as parsed before sending the input
+            self.state = state
+            input = json.dumps(input_dict)
             output = self.send_and_recv(input, timeout)
 
             repl_io = Lean4ReplIO(input, output)
@@ -181,3 +180,5 @@ class Lean4ReplWrapper:
             return {"error": "FAILED DUE TO KEYBOARD INTERRUPT", "buffer": repl.buffer}
         except EOF:
             return {"error": "FAILED DUE TO EOF", "buffer": repl.buffer}
+        except:  # noqa: E722
+            return {"error": "FAILED DUE TO UNKNOWN REASON", "buffer": repl.buffer}
