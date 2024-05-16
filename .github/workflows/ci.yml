@@ -49,6 +49,9 @@ jobs:
       - name: Install repl
         run: |
           ./scripts/install_repl.sh
+      - name: Install Lean 4 Jupyter Kernel
+        run: |
+          python -m lean4_jupyter.install
       - name: Test
         run: |
           pytest -vv --durations=50 --nbval --nbval-kernel-name lean4 examples/
