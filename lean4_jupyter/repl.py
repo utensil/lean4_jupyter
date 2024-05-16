@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from subprocess import check_output
 import json
 import re
+import os
 
 
 class Lean4ReplState:
@@ -45,10 +46,13 @@ class Lean4ReplOutput:
 
 class Lean4ReplWrapper:
 
-    def __init__(self):
+    def launch():
+        return pexpect.spawn("lake env repl",
+                             echo=False, encoding='utf-8', codec_errors='replace')
+
+    def init(self):
         self.check()
-        self.repl = pexpect.spawn("lake env repl",
-                                  echo=False, encoding='utf-8', codec_errors='replace')
+        self.repl = Lean4ReplWrapper.launch()
         self.state = Lean4ReplState()
         self.commands = {}
         self.expect_patterns = self.repl.compile_pattern_list([
@@ -58,8 +62,15 @@ class Lean4ReplWrapper:
             # pexpect.ExceptionPexpect
         ])
 
+    def __init__(self):
+        self.init()
+
     def shutdown(self):
         self.repl.terminate(force=True)
+
+    def cd(self, path):
+        os.chdir(path)
+        self.init()
 
     def check(self):
         try:
@@ -76,7 +87,14 @@ class Lean4ReplWrapper:
         # replace string matching regrex ^% with --%
         return re.sub(r'^%', '--%', code)
 
-    def parse_state_magic(self, code):
+    def run_magic(self, code):
+        # if code starts with --%cd, change the working directory
+        matched_cd = re.match(r'^--%\s*cd\s+(?P<path>.*)\s*\n', code)
+        if matched_cd:
+            path = matched_cd.group('path')
+            self.cd(path)
+            return Lean4ReplState()
+
         # if code starts with --% env, then reset the environment
         matched_env_reset = re.match(r'^--%\s*e(nv)?[^0-9]*\n', code)
         if matched_env_reset:
@@ -109,7 +127,7 @@ class Lean4ReplWrapper:
 
     def run_command(self, code, timeout=-1):
         code = self.comment_out_magic(code)
-        state = self.parse_state_magic(code)
+        state = self.run_magic(code)
         env = state.env
         repl = self.repl
 
