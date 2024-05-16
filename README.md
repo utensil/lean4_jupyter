@@ -81,7 +81,7 @@ In case `repl` hangs, you could kill it with
 ps aux|grep repl|grep -v grep|awk '{print $2}'|xargs kill -9
 ```
 
-Then, ensure that you have `python`, `pip`, `jupyter` installed:
+Then, ensure that you have `python`, `pip`, `jupyter` installed, and run:
 
 ```bash
 pip install jupyterlab
@@ -91,7 +91,7 @@ Then, install the kernel:
 
 ```bash
 pip install lean4_jupyter
-# or in development mode
+# or in development mode, check out the repo then run
 # pip install -e .
 python -m lean4_jupyter.install
 ```
