@@ -9,7 +9,11 @@ authors = [
 ]
 description = "lean4_jupyter: A Lean 4 Jupyter kernel via REPL"
 readme = "README.md"
-dependencies = ["pexpect (>=4.0)", "ipykernel", "alectryon @ git+https://github.com/Kha/alectryon.git@typeid"]
+dependencies = [
+    "pexpect (>=4.0)",
+    "ipykernel",
+    "alectryon @ https://github.com/Kha/alectryon/archive/c3b16f650665745e1da4ddfcc048d3bd639f71d5.zip"
+]
 classifiers = [
     "Framework :: Jupyter",
     "License :: OSI Approved :: BSD License",
