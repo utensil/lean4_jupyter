@@ -8,23 +8,20 @@ Alpha.
 
 ## What's already working
 
-The kernel already can:
+🔥 See it in action: [Tutorial notebook](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true).
+
+The kernel can:
 
 - execute Lean 4 commands
 - execute Lean 4 tatics with magic like `% proof` immediately after a `sorry`ed theorem
 - backtrack to earlier environment or proof states with magic like `% env 1` or `% prove 3`
 - support magics like [`%cd`](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/01_cd.ipynb?flush_cache=true) or [`%load`](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/02_load.ipynb?flush_cache=true) (loading a file)
+- support for importing modules from projects and their dependencies, e.g. `Mathlib` ( [demo](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/03_import.ipynb?flush_cache=true) ).
 
 Output:
 
-- In `jupyter notebook` and alike: echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style
+- In `jupyter notebook` and alike: echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style with messages, proof states
 - In `jupyter console` and alike: echos the input annotated in [codespan](https://github.com/brendanzab/codespan) style
-
-See it in action here: [00_tutorial.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true).
-
-The kernel also have preliminary support for running the notebook from the root of a Lean 4 project, so you can import modules from the project or the modules declared in the `lakefile.lean` of the project, e.g. `Mathlib`.
-
-See it in action here: [demo.ipynb](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/demo_proj/demo.ipynb?flush_cache=true).
 
 ## What's next
 
