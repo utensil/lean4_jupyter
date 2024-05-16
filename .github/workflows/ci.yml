@@ -44,7 +44,7 @@ jobs:
       - name: Install elan
         run: |
           set -o pipefail
-          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | bash -s -- -y
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | bash -s -- -y --default-toolchain none
           echo "$HOME/.elan/bin" >> $GITHUB_PATH
       - name: Install repl
         run: |
@@ -59,6 +59,12 @@ jobs:
       - name: Try run kernel with papermill
         run: |
           python -m papermill --kernel lean4 examples/repl-issue-40-dup-msg.ipynb examples/repl-issue-40-dup-msg.expected.ipynb
+      - name: Prepare Lean 4 toolchain and demo projects
+        run: |
+          set -o pipefail
+          elan default leanprover/lean4:v4.8.0-rc1
+          cd examples/demo_proj
+          lake exe cache get && lake build
       - name: Test
         run: |
           pytest -vv --durations=50 --nbval --nbval-kernel-name lean4 examples/
