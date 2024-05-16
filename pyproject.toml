@@ -12,7 +12,7 @@ readme = "README.md"
 dependencies = [
     "pexpect (>=4.0)",
     "ipykernel",
-    "alectryon @ https://github.com/Kha/alectryon/archive/c3b16f650665745e1da4ddfcc048d3bd639f71d5.zip#sha256=d785ad48dc3d65a98f12d5653b95d63c299a1730fc5fdfb519957c9e60cd5a32"
+    "alectryon"
 ]
 classifiers = [
     "Framework :: Jupyter",
