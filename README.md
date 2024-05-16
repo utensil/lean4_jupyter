@@ -13,6 +13,7 @@ The kernel already can:
 - execute Lean 4 commands
 - execute Lean 4 tatics with magic like `% proof` immediately after a `sorry`ed theorem
 - backtrack to earlier environment or proof states with magic like `% env 1` or `% prove 3`
+- support magics like [`%cd`](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/01_cd.ipynb?flush_cache=true) or [`%load`](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/02_load.ipynb?flush_cache=true) (loading a file)
 
 Output:
 
@@ -28,7 +29,7 @@ See it in action here: [demo.ipynb](https://nbviewer.org/github/utensil/lean4_ju
 ## What's next
 
 - Fix [repl#40](https://github.com/leanprover-community/repl/issues/40) (PRed as [repl#41](https://github.com/leanprover-community/repl/issues/41))
-- Support more magics like `%cd` or `%load` (loading a file)
+- Make magics like `%cd` and `%load` work more robustly
 - Add a CI based on [papermill](https://github.com/nteract/papermill/)
 - Improve UI in Jupyter Dark themes
 - Minor code refactor to smooth things out
