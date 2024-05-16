@@ -28,6 +28,7 @@ Output:
 - Fix [repl#40](https://github.com/leanprover-community/repl/issues/40) (PRed as [repl#41](https://github.com/leanprover-community/repl/issues/41))
 - Improve the alectryon annotation to support annotations in the middle of a line
 - Make magics like `%cd` and `%load` work more robustly
+- Support show `tactics` after `%load`
 - Add a CI based on [papermill](https://github.com/nteract/papermill/)
 - Improve UI in Jupyter Dark themes
 - Minor code refactor to smooth things out
