@@ -89,6 +89,9 @@ class Lean4ReplWrapper:
         return re.sub(r'^%', '--%', code)
 
     def run_magic(self, code, timeout):
+        return None, self.run_simple_magic(code, timeout)
+
+    def run_simple_magic(self, code, timeout):
         # if code starts with --%cd, change the working directory
         matched_cd = re.match(r'^--%\s*cd\s+(?P<path>.*)\s*\n', code)
         if matched_cd:
@@ -161,7 +164,12 @@ class Lean4ReplWrapper:
     def run_command(self, code, timeout=-1):
         try:
             code = self.comment_out_magic(code)
-            state = self.run_magic(code, timeout)
+
+            repl_io, state = self.run_magic(code, timeout)
+            if repl_io is not None:
+                self.handle_post_state(repl_io)
+                return repl_io
+
             env = state.env
             repl = self.repl
 
