@@ -88,7 +88,7 @@ class Lean4ReplWrapper:
         # replace string matching regrex ^% with --%
         return re.sub(r'^%', '--%', code)
 
-    def run_magic(self, code):
+    def run_magic(self, code, timeout):
         # if code starts with --%cd, change the working directory
         matched_cd = re.match(r'^--%\s*cd\s+(?P<path>.*)\s*\n', code)
         if matched_cd:
@@ -134,10 +134,34 @@ class Lean4ReplWrapper:
         output = repl.before  # + repl.match.group()
         return output
 
+    def load_file(self, file_path, timeout, all_tactics=True):
+        input_dict = {
+            "path": file_path,
+            "allTactics": all_tactics
+        }
+        input = json.dumps(input_dict)
+        output = self.send_and_recv(input, timeout)
+        repl_io = Lean4ReplIO(input, output)
+        return repl_io
+
+    def handle_pre_state(self, state):
+        # update the state as parsed before sending the input
+        self.state = state
+
+    def handle_post_state(self, repl_io):
+        env = repl_io.output.env if repl_io.output.env is not None else self.state.env
+
+        self.state = Lean4ReplState(
+            env=env, proofStates=repl_io.output.proofStates)
+
+        # TODO: for now, this would overwrite the previous command executed for the same env
+        # Instead, this should be stored in a graph, thus could be displayed by a magic
+        self.commands[env] = repl_io.input.info
+
     def run_command(self, code, timeout=-1):
         try:
             code = self.comment_out_magic(code)
-            state = self.run_magic(code)
+            state = self.run_magic(code, timeout)
             env = state.env
             repl = self.repl
 
@@ -153,22 +177,12 @@ class Lean4ReplWrapper:
                     "tactic": code,
                     "proofState": max(state.proofStates)
                 }
-
-            # update the state as parsed before sending the input
-            self.state = state
             input = json.dumps(input_dict)
+
+            self.handle_pre_state(state)
             output = self.send_and_recv(input, timeout)
-
             repl_io = Lean4ReplIO(input, output)
-
-            env = repl_io.output.env if repl_io.output.env is not None else self.state.env
-
-            self.state = Lean4ReplState(
-                env=env, proofStates=repl_io.output.proofStates)
-
-            # TODO: for now, this would overwrite the previous command executed for the same env
-            # Instead, this should be stored in a graph, thus could be displayed by a magic
-            self.commands[env] = input_dict
+            self.handle_post_state(repl_io)
 
             return repl_io
         # TODO the following should be rewritten to emit not dicts
