@@ -27,10 +27,11 @@ See it in action here: [demo.ipynb](https://nbviewer.org/github/utensil/lean4_ju
 
 ## What's next
 
-- Fix [repl#40](https://github.com/leanprover-community/repl/issues/40)
+- Fix [repl#40](https://github.com/leanprover-community/repl/issues/40) (PRed as [repl#41](https://github.com/leanprover-community/repl/issues/41))
+- Support more magics like `%cd` or `%load` (loading a file)
 - Add a CI based on [papermill](https://github.com/nteract/papermill/)
 - Improve UI in Jupyter Dark themes
-- Support loading a file.
+- Minor code refactor to smooth things out
 
 ## Installation
 
@@ -45,14 +46,26 @@ lake --help|head -n 1
 
 they should output Lean/Lake versions, respectively.
 
-Then, you need to have a working `repl` in your `PATH`. You can build it from source:
+Then, you need to have a working `repl` in your `PATH`.
+
+You can build it from source (please read and adjust them before executing):
 
 ```bash
+# If you need to clean up before reinstalling
 # rm -rf ~/.lean4_jupyter/repl
 # rm /usr/local/bin/repl
+
+# Prepare a directory for lean4_jupyter where we install repl to
 mkdir -p ~/.lean4_jupyter
-git clone https://github.com/leanprover-community/repl ~/.lean4_jupyter/repl
+
+# Before repl#41 merge, you might need to use this branch instead
+git clone -b fix-dup https://github.com/utensil/repl ~/.lean4_jupyter/repl
+# git clone https://github.com/leanprover-community/repl ~/.lean4_jupyter/repl
+
+# Build repl
 (cd ~/.lean4_jupyter/repl && lake build)
+
+# Install repl to a place in your PATH, so less hassle of fiddling with PATH
 ln -s ~/.lean4_jupyter/repl/.lake/build/bin/repl /usr/local/bin/repl
 ```
 
