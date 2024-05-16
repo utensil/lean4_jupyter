@@ -28,6 +28,8 @@ Output:
 - In `jupyter notebook` and alike: echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style, at the corresponding line (not columns yet), with messages, proof states
 - In `jupyter console` and alike: echos the input annotated in [codespan](https://github.com/brendanzab/codespan) style, at the corresponding `line:column`, with messages, proof states
 
+The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and tested with [nbval](https://github.com/computationalmodelling/nbval) in CI.
+
 ## What's next
 
 - Fix [repl#40](https://github.com/leanprover-community/repl/issues/40) (PRed as [repl#41](https://github.com/leanprover-community/repl/issues/41))
@@ -36,6 +38,9 @@ Output:
 - Support show `tactics` after `%load`
 - Add all `repl` test cases to the CI and set up coverage
 - Improve UI in Jupyter Dark themes
+- Support running lake commands via `%lake`, e.g. `%lake build`
+- Better (streamed) feedback for long running commands such as `import`
+- Support changing Lean toolchain and adding dependencies in an ad hoc manner
 - Minor code refactor to smooth things out
 
 ## Installation
