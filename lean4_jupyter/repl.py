@@ -70,6 +70,7 @@ class Lean4ReplWrapper:
 
     def cd(self, path):
         os.chdir(path)
+        self.shutdown()
         self.init()
 
     def check(self):
