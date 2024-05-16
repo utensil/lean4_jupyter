@@ -48,10 +48,17 @@ jobs:
           echo "$HOME/.elan/bin" >> $GITHUB_PATH
       - name: Install repl
         run: |
+          set -o pipefail
           ./scripts/install_repl.sh
       - name: Install Lean 4 Jupyter Kernel
         run: |
           python -m lean4_jupyter.install
+      - name: Try run kernel
+        run: |
+          python -m lean4_jupyter.kernel --help
+      - name: Try run kernel with papermill
+        run: |
+          python -m papermill --kernel lean4 examples/repl-issue-40-dup-msg.ipynb examples/repl-issue-40-dup-msg.expected.ipynb
       - name: Test
         run: |
           pytest -vv --durations=50 --nbval --nbval-kernel-name lean4 examples/

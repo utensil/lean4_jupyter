@@ -33,5 +33,6 @@ Source = "https://github.com/utensil/lean4_jupyter"
 test = [
     "flake8",
     "pytest",
-    "nbval"
+    "nbval",
+    "papermill"
 ]
