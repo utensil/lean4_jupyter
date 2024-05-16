@@ -1,6 +1,6 @@
 # lean4_jupyter
 
-A Lean 4 Jupyter kernel via [REPL](https://github.com/leanprover-community/repl).
+A Lean 4 Jupyter kernel via [repl](https://github.com/leanprover-community/repl).
 
 ## Status
 
