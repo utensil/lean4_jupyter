@@ -126,6 +126,14 @@ class Lean4ReplWrapper:
         # By default, ignore proofStates, use the last env, assuming this is a new command
         return Lean4ReplState(env=self.state.env)
 
+    def send_and_recv(self, input, timeout):
+        repl = self.repl
+        repl.sendline(input)
+        repl.sendline()
+        repl.expect_list(self.expect_patterns, timeout=timeout)
+        output = repl.before  # + repl.match.group()
+        return output
+
     def run_command(self, code, timeout=-1):
         code = self.comment_out_magic(code)
         state = self.run_magic(code)
@@ -148,12 +156,10 @@ class Lean4ReplWrapper:
         # update the state as parsed before sending the input
         self.state = state
         input = json.dumps(input_dict)
-        repl.sendline(input)
 
-        repl.sendline()
         try:
-            repl.expect_list(self.expect_patterns, timeout=timeout)
-            output = repl.before  # + repl.match.group()
+            output = self.send_and_recv(input, timeout)
+
             repl_io = Lean4ReplIO(input, output)
 
             env = repl_io.output.env if repl_io.output.env is not None else self.state.env
