@@ -20,12 +20,13 @@ The kernel can:
 
 Output:
 
-- In `jupyter notebook` and alike: echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style with messages, proof states
-- In `jupyter console` and alike: echos the input annotated in [codespan](https://github.com/brendanzab/codespan) style
+- In `jupyter notebook` and alike: echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style, at the corresponding line (not columns yet), with messages, proof states
+- In `jupyter console` and alike: echos the input annotated in [codespan](https://github.com/brendanzab/codespan) style, at the corresponding `line:column`, with messages, proof states
 
 ## What's next
 
 - Fix [repl#40](https://github.com/leanprover-community/repl/issues/40) (PRed as [repl#41](https://github.com/leanprover-community/repl/issues/41))
+- Improve the alectryon annotation to support annotations in the middle of a line
 - Make magics like `%cd` and `%load` work more robustly
 - Add a CI based on [papermill](https://github.com/nteract/papermill/)
 - Improve UI in Jupyter Dark themes
