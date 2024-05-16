@@ -35,14 +35,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-    # - name: Install dependencies
-    #   run: |
-    #     python -m pip install -r test_requirements.txt
-    #     python -m pip install -e .
-    #     python -m pip check
-    # - name: Lint
-    #   run: |
-    #     flake8 -v
+      - name: Install dependencies
+        run: |
+          python -m pip install -e ".[test]"
+      - name: Lint
+        run: |
+          flake8 -v
+      - name: Test
+        run: |
+          pytest -vv --durations=50 --nbval --nbval-kernel-name lean4 examples/
 
   release:
     name: Create release and send to PyPI
