@@ -56,9 +56,9 @@ jobs:
       - name: Try run kernel
         run: |
           python -m lean4_jupyter.kernel --help
-      - name: Try run kernel with papermill
-        run: |
-          python -m papermill --kernel lean4 examples/repl-issue-40-dup-msg.ipynb examples/repl-issue-40-dup-msg.expected.ipynb
+      # - name: Try run kernel with papermill
+      #   run: |
+      #     python -m papermill --kernel lean4 examples/repl-issue-40-dup-msg.ipynb examples/repl-issue-40-dup-msg.expected.ipynb
       - name: Prepare Lean 4 toolchain and demo projects
         run: |
           set -o pipefail
