@@ -25,8 +25,9 @@ The kernel can:
 
 Output:
 
-- In `jupyter notebook` and alike: echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style, at the corresponding line (not columns yet), with messages, proof states
-- In `jupyter console` and alike: echos the input annotated in [codespan](https://github.com/brendanzab/codespan) style, at the corresponding `line:column`, with messages, proof states
+- In `jupyter notebook` and alike: echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style, at the corresponding line (not columns yet), with messages, proof states etc.
+- In `jupyter console` and alike: echos the input annotated in [codespan](https://github.com/brendanzab/codespan) style, at the corresponding `line:column`, with messages, proof states etc.
+- Raw `repl` input/output in JSON format can be inspected by click-to-expand in the WebUI.
 
 The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and tested with [nbval](https://github.com/computationalmodelling/nbval) in CI.
 
@@ -36,6 +37,7 @@ The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and test
 - Improve the syntax highlighting in the WebUI, currently it sees Lean 4 as Python
 - Improve the alectryon annotation to support annotations in the middle of a line
 - Provide a switch to use codespan instead of alectryon in the WebUI, or a way to see warnings and errors without hovering or clicking
+- Provide a switch for raw `repl` input/output inspection as a magic, disable it by default
 - Learn from [previous prototypes](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Prototype.3A.20Jupyter.20for.20Lean4) to improve UX
 - Make magics like `%cd` and `%load` work more robustly
 - Support show `tactics` after `%load`
