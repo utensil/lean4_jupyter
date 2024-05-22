@@ -49,6 +49,8 @@ The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and test
 - Minimize emmitted HTML code
 - Minor code refactor to smooth things out
 
+If you are interested in one of these TODOs, or you have some other nice features in mind, you may raise the discussion by opening an issue or discuss it in the [Zulip topic](https://leanprover.zulipchat.com/#narrow/stream/113488-general/topic/lean4_jupyter.3A.20A.20Lean.204.20Jupyter.20kernel.20via.20repl).
+
 ## Installation
 
 First, you need a working Lean 4 installation. You can install it via [elan](https://github.com/leanprover/elan).
