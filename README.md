@@ -125,7 +125,7 @@ jupyter qtconsole --kernel lean4
 
 ## Rationale
 
-I've always wanted to do literate programming with Lean 4 in Jupyter, but Lean LSP and Infoview in VS Code has provided a immersive experience with immediate feedback, so I could never imagine a better way to interact with Lean 4, until interacting with repl makes me believe that _limitless backtrack_ is another feature that best accompanies the _reproducible interactivity_ of alectryon style annotations.
+I've always wanted to do literate programming with Lean 4 in Jupyter, but Lean LSP and Infoview in VS Code has provided an immersive experience with immediate feedback, so I could never imagine a better way to interact with Lean 4, until interacting with repl makes me believe that _limitless backtrack_ is another feature that best accompanies the _reproducible interactivity_ of alectryon style annotations.
 
 The idea came to me in an afternoon, and I thought it's technically trivial to implement overnight thanks to repl. It took me a bit longer to work out the logistics of UX and polish the code, but it's fun to see the potential.
 
