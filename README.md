@@ -46,6 +46,7 @@ The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and test
 - Support running lake commands via `%lake`, e.g. `%lake build`
 - Better (streamed) feedback for long running commands such as `import`
 - Support changing Lean toolchain and adding dependencies in an ad hoc manner
+- Minimize emmitted HTML code
 - Minor code refactor to smooth things out
 
 ## Installation
