@@ -13,15 +13,15 @@ A Lean 4 Jupyter kernel via [repl](https://github.com/leanprover-community/repl)
 
 ## What's already working
 
-🔥 See it in action: [Tutorial notebook](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/00_tutorial.ipynb?flush_cache=true).
+🔥 See it in action: [Tutorial notebook](https://nbviewer.org/github/utensil/lean4_jupyter/blob/v0.0.1/examples/00_tutorial.ipynb?flush_cache=true).
 
 The kernel can:
 
-- execute Lean 4 commands
+- execute Lean 4 commands (including definitions, theorems, etc.)
 - execute Lean 4 tatics with magic like `% proof` immediately after a `sorry`ed theorem
 - backtrack to earlier environment or proof states with magic like `% env 1` or `% prove 3`
-- support magics like [`%cd`](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/01_cd.ipynb?flush_cache=true) or [`%load`](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/02_load.ipynb?flush_cache=true) (loading a file)
-- support for importing modules from projects and their dependencies, e.g. `Mathlib` ( [demo](https://nbviewer.org/github/utensil/lean4_jupyter/blob/main/examples/03_import.ipynb?flush_cache=true) ).
+- support magics like [`%cd`](https://nbviewer.org/github/utensil/lean4_jupyter/blob/v0.0.1/examples/01_cd.ipynb?flush_cache=true) or [`%load`](https://nbviewer.org/github/utensil/lean4_jupyter/blob/v0.0.1/examples/02_load.ipynb?flush_cache=true) (loading a file)
+- support for importing modules from projects and their dependencies, e.g. `Mathlib` ( [demo](https://nbviewer.org/github/utensil/lean4_jupyter/blob/v0.0.1/examples/03_import.ipynb?flush_cache=true) ).
 
 Output:
 
@@ -34,6 +34,8 @@ The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and test
 
 - Fix [repl#40](https://github.com/leanprover-community/repl/issues/40) (PRed as [repl#41](https://github.com/leanprover-community/repl/issues/41))
 - Improve the alectryon annotation to support annotations in the middle of a line
+- Provide a switch to use codespan instead of alectryon in the WebUI, or a way to see warnings and errors without hovering or clicking
+- Learn from [previous prototypes](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Prototype.3A.20Jupyter.20for.20Lean4) to improve UX
 - Make magics like `%cd` and `%load` work more robustly
 - Support show `tactics` after `%load`
 - Add all `repl` test cases to the CI and set up coverage
