@@ -13,7 +13,7 @@ A Lean 4 Jupyter kernel via [repl](https://github.com/leanprover-community/repl)
 
 ## What's already working
 
-🔥 See it in action: [Tutorial notebook](https://nbviewer.org/github/utensil/lean4_jupyter/blob/v0.0.1/examples/00_tutorial.ipynb?flush_cache=true).
+🔥 See it in action: [Tutorial notebook](https://nbviewer.org/github/utensil/lean4_jupyter/blob/18e8d701982d640aa443195f5ca287eec45313e3/examples/00_tutorial.ipynb?flush_cache=true).
 
 The kernel can:
 
@@ -33,6 +33,7 @@ The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and test
 ## What's next
 
 - Fix [repl#40](https://github.com/leanprover-community/repl/issues/40) (PRed as [repl#41](https://github.com/leanprover-community/repl/issues/41))
+- Improve the syntax highlighting in the WebUI, currently it sees Lean 4 as Python
 - Improve the alectryon annotation to support annotations in the middle of a line
 - Provide a switch to use codespan instead of alectryon in the WebUI, or a way to see warnings and errors without hovering or clicking
 - Learn from [previous prototypes](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Prototype.3A.20Jupyter.20for.20Lean4) to improve UX
