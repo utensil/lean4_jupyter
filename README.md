@@ -33,7 +33,6 @@ The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and test
 
 ## What's next
 
-- Fix [repl#40](https://github.com/leanprover-community/repl/issues/40) (PRed as [repl#41](https://github.com/leanprover-community/repl/issues/41))
 - Improve the syntax highlighting in the WebUI, currently it sees Lean 4 as Python
 - Improve the alectryon annotation to support annotations in the middle of a line
 - Provide a switch to use codespan instead of alectryon in the WebUI, or a way to see warnings and errors without hovering or clicking
@@ -76,9 +75,7 @@ You can build it from source (please read and adjust them before executing):
 # Prepare a directory for lean4_jupyter where we install repl to
 mkdir -p ~/.lean4_jupyter
 
-# Before repl#41 merge, you might need to use this branch instead
-git clone -b fix-dup https://github.com/utensil/repl ~/.lean4_jupyter/repl
-# git clone https://github.com/leanprover-community/repl ~/.lean4_jupyter/repl
+git clone https://github.com/leanprover-community/repl ~/.lean4_jupyter/repl
 
 # Build repl
 (cd ~/.lean4_jupyter/repl && lake build)
