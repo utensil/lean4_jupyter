@@ -46,6 +46,8 @@ The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and test
 - Better (streamed) feedback for long running commands such as `import`
 - Support changing Lean toolchain and adding dependencies in an ad hoc manner
 - Minimize emmitted HTML code
+- Possibly use [@shikijs/twoslash](https://shiki.style/packages/twoslash#rendererrich) style annotation and no longer depends on alectryon
+- Possibly change to [Aya](https://github.com/aya-prover/aya-dev/blob/main/cli-impl/src/test/resources/negative/PatCohError.txt) style annotation for plain text output
 - Minor code refactor to smooth things out
 
 If you are interested in one of these TODOs, or you have some other nice features in mind, you may raise the discussion by opening an issue or discuss it in the [Zulip topic](https://leanprover.zulipchat.com/#narrow/stream/113488-general/topic/lean4_jupyter.3A.20A.20Lean.204.20Jupyter.20kernel.20via.20repl).
