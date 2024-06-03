@@ -1,9 +1,7 @@
 #!/bin/bash
 set -e
 
-# If you need to clean up before reinstalling
-# rm -rf ~/.lean4_jupyter/repl
-# rm /usr/local/bin/repl
+# Script purpose: install the Lean REPL
 
 # get script parent directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
