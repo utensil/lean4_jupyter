@@ -215,7 +215,8 @@ class Lean4ReplWrapper:
         except Exception as e:
             exception_details = str(e)
             stack_trace = traceback.format_exc()
-            return {"error": f"FAILED DUE TO EXCEPTION: {exception_details}", "buffer": repl.buffer, "stack_trace": stack_trace}
+            return {"error": f"FAILED DUE TO EXCEPTION: {exception_details}",
+                    "buffer": repl.buffer, "stack_trace": stack_trace}
         except:  # noqa: E722
             # get the exception details
             return {"error": "FAILED DUE TO UNKNOWN REASON", "buffer": repl.buffer}

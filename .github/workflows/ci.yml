@@ -38,7 +38,7 @@ jobs:
       - name: Lint
         run: |
           python -m pip install flake8
-          flake8 -v
+          python -m flake8 -v
       - name: Install elan
         run: |
           set -o pipefail
