@@ -67,24 +67,7 @@ they should output Lean/Lake versions, respectively.
 
 Then, you need to have a working `repl` in your `PATH`.
 
-You can build it from source (please read and adjust them before executing):
-
-```bash
-# If you need to clean up before reinstalling
-# rm -rf ~/.lean4_jupyter/repl
-# rm /usr/local/bin/repl
-
-# Prepare a directory for lean4_jupyter where we install repl to
-mkdir -p ~/.lean4_jupyter
-
-git clone https://github.com/leanprover-community/repl ~/.lean4_jupyter/repl
-
-# Build repl
-(cd ~/.lean4_jupyter/repl && lake build)
-
-# Install repl to a place in your PATH, so less hassle of fiddling with PATH
-ln -s ~/.lean4_jupyter/repl/.lake/build/bin/repl /usr/local/bin/repl
-```
+You can build it from source (please read and adjust them before executing) using the example script `scripts/install_repl.sh`.
 
 Verify that `repl` is working:
 
@@ -101,7 +84,9 @@ ps aux|grep repl|grep -v grep|awk '{print $2}'|xargs kill -9
 Then, ensure that you have `python`, `pip` installed, and install Jupyter:
 
 ```bash
-pip install jupyterlab
+pip install notebook
+# or
+# pip install jupyterlab
 ```
 
 Then, install the kernel:
