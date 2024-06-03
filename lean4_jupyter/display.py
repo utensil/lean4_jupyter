@@ -15,7 +15,7 @@ class Lean4ReplOutputDisplay:
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/utensil/lean4_jupyter@main/vendor/lean4_jupyter.css">
         <script src="https://lean-lang.org/lean4/doc/alectryon.js"></script>
         <script src="https://lean-lang.org/lean4/doc/highlight.js"></script>
-    '''
+    '''  # noqa: E501
 
     HTML_TEMPLATE = '''
         {header}
