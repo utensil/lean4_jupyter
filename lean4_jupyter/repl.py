@@ -47,7 +47,8 @@ class Lean4ReplOutput:
 
 class Lean4ReplWrapper:
 
-    def launch():
+    @classmethod
+    def launch(cls):
         return pexpect.spawn("lake env repl",
                              echo=False, encoding='utf-8', codec_errors='replace')
 
