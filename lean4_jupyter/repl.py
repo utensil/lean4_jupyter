@@ -171,6 +171,8 @@ class Lean4ReplWrapper:
         return self.state
 
     def run_command(self, code, timeout=-1):
+        repl = self.repl
+
         try:
             code = self.comment_out_magic(code)
             repl_io, state = self.run_magic(code, timeout)
@@ -179,8 +181,6 @@ class Lean4ReplWrapper:
                 return repl_io
 
             env = state.env
-            repl = self.repl
-
             if len(state.proofStates) == 0:
                 input_dict = {
                         "cmd": code
