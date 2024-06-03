@@ -9,8 +9,8 @@ PROJECT_ROOT=$SCRIPT_DIR/..
 REPL_HOME=$PROJECT_ROOT/.lean4_jupyter/repl
 
 # force clean up
-rm -rf $REPL_HOME
-rm /usr/local/bin/repl
+rm -rf $REPL_HOME || echo "No .lean4_jupyter/repl to clean up"
+rm /usr/local/bin/repl || echo "No /usr/local/bin/repl to clean up"
 
 # repl is not bumped to leanprover/lean4:v4.8.0-rc2 yet
 elan default leanprover/lean4:v4.8.0-rc1
