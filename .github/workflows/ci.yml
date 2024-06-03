@@ -35,39 +35,26 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          python -m pip install -e ".[test]"
       - name: Lint
         run: |
+          python -m pip install flake8
           flake8 -v
       - name: Install elan
         run: |
           set -o pipefail
           curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | bash -s -- -y --default-toolchain none
           echo "$HOME/.elan/bin" >> $GITHUB_PATH
-      - name: Install repl
+      - name: Install repl, lean4_jupyter, and prepare demo_proj
         run: |
           set -o pipefail
-          ./scripts/install_repl.sh
-      - name: Install Lean 4 Jupyter Kernel
-        run: |
-          python -m lean4_jupyter.install
+          ./scripts/prep.sh
       - name: Try run kernel
         run: |
           python -m lean4_jupyter.kernel --help
-      # - name: Try run kernel with papermill
-      #   run: |
-      #     python -m papermill --kernel lean4 examples/repl-issue-40-dup-msg.ipynb examples/repl-issue-40-dup-msg.expected.ipynb
-      - name: Prepare Lean 4 toolchain and demo projects
-        run: |
-          set -o pipefail
-          elan default leanprover/lean4:v4.8.0-rc1
-          cd examples/demo_proj
-          lake exe cache get && lake build
       - name: Test
         run: |
-          pytest -vv --durations=50 --nbval --nbval-kernel-name lean4 examples/
+          set -o pipefail
+          ./scripts/test.sh
 
   release:
     name: Create release and send to PyPI

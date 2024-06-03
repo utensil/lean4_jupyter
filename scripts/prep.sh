@@ -18,12 +18,19 @@ elan default leanprover/lean4:v4.8.0-rc1
 # install the Lean REPL
 $SCRIPT_DIR/install_repl.sh
 
-# switch to a python virtual environment
-pyenv shell 3.11
+if [ -z "$CI" ]; then
+  # if the environment variable CI is not set
+  # then use pyenv to switch to the correct python version
+  pyenv shell 3.11
+fi
 
 # force uninstall alectryon
 pip uninstall alectryon -y
 
 # install the Lean4 Jupyter kernel
-pip install -e $PROJECT_ROOT
+pip install -f -e "$PROJECT_ROOT[test]"
 python -m lean4_jupyter.install
+
+# prepare demo_proj
+cd examples/demo_proj
+lake exe cache get && lake build
