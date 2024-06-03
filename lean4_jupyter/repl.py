@@ -6,6 +6,7 @@ from subprocess import check_output
 import json
 import re
 import os
+import traceback
 
 
 class Lean4ReplState:
@@ -210,5 +211,10 @@ class Lean4ReplWrapper:
             return {"error": "FAILED DUE TO KEYBOARD INTERRUPT", "buffer": repl.buffer}
         except EOF:
             return {"error": "FAILED DUE TO EOF", "buffer": repl.buffer}
+        except Exception as e:
+            exception_details = str(e)
+            stack_trace = traceback.format_exc()
+            return {"error": f"FAILED DUE TO EXCEPTION: {exception_details}", "buffer": repl.buffer, "stack_trace": stack_trace}
         except:  # noqa: E722
+            # get the exception details
             return {"error": "FAILED DUE TO UNKNOWN REASON", "buffer": repl.buffer}
