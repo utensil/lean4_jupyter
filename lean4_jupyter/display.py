@@ -12,29 +12,9 @@ class Lean4ReplOutputDisplay:
     HTML_HEADER = '''
         <link rel="stylesheet" href="https://lean-lang.org/lean4/doc/alectryon.css">
         <link rel="stylesheet" href="https://lean-lang.org/lean4/doc/pygments.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/utensil/lean4_jupyter@main/vendor/lean4_jupyter.css">
         <script src="https://lean-lang.org/lean4/doc/alectryon.js"></script>
         <script src="https://lean-lang.org/lean4/doc/highlight.js"></script>
-        <style>
-            @media (any-hover: hover) {
-                .alectryon-io .alectryon-sentence:hover .alectryon-output,
-                .alectryon-io .alectryon-token:hover .alectryon-type-info-wrapper,
-                .alectryon-io .alectryon-token:hover .alectryon-type-info-wrapper {
-                    position: unset;
-                }
-            }
-
-            .highlight .w, .code .w {
-                color: #d3d7cf;
-                text-decoration: none;
-            }
-
-            body[data-jp-theme-light="false"] .alectryon-io .alectryon-goals,
-            body[data-jp-theme-light="false"] .alectryon-io .alectryon-messages,
-            body[data-jp-theme-light="false"] .alectryon-io .alectryon-goal,
-            body[data-jp-theme-light="false"] .alectryon-io .alectryon-message {
-                background: black;
-            }
-        </style>
     '''
 
     HTML_TEMPLATE = '''
