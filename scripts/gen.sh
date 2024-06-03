@@ -12,4 +12,6 @@ REPL_HOME=$PROJECT_ROOT/.lean4_jupyter/repl
 for file in $PROJECT_ROOT/examples/*.ipynb; do
   # regenerate the notebook # --log-level DEBUG
   python -m papermill --cwd $PROJECT_ROOT/examples --kernel lean4 $file $file
+  # run the above in one sed line
+  sed -i '' '/"input_path": "/d;/"output_path": "/d' $file
 done
