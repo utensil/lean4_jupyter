@@ -1,0 +1,19 @@
+@media (any-hover: hover) {
+  .alectryon-io .alectryon-sentence:hover .alectryon-output,
+  .alectryon-io .alectryon-token:hover .alectryon-type-info-wrapper,
+  .alectryon-io .alectryon-token:hover .alectryon-type-info-wrapper {
+      position: unset;
+  }
+}
+
+.highlight .w, .code .w {
+  color: #d3d7cf;
+  text-decoration: none;
+}
+
+body[data-jp-theme-light="false"] .alectryon-io .alectryon-goals,
+body[data-jp-theme-light="false"] .alectryon-io .alectryon-messages,
+body[data-jp-theme-light="false"] .alectryon-io .alectryon-goal,
+body[data-jp-theme-light="false"] .alectryon-io .alectryon-message {
+  background: black;
+}
