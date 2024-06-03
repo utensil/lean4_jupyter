@@ -12,6 +12,9 @@ REPL_HOME=$PROJECT_ROOT/.lean4_jupyter/repl
 rm -rf $REPL_HOME
 rm /usr/local/bin/repl
 
+# repl is not bumped to leanprover/lean4:v4.8.0-rc2 yet
+elan default leanprover/lean4:v4.8.0-rc1
+
 # install the Lean REPL
 $SCRIPT_DIR/install_repl.sh
 

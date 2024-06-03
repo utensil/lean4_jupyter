@@ -62,7 +62,7 @@ jobs:
       - name: Prepare Lean 4 toolchain and demo projects
         run: |
           set -o pipefail
-          elan default leanprover/lean4:v4.8.0-rc2
+          elan default leanprover/lean4:v4.8.0-rc1
           cd examples/demo_proj
           lake exe cache get && lake build
       - name: Test
