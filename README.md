@@ -18,7 +18,7 @@ A Lean 4 Jupyter kernel via [repl](https://github.com/leanprover-community/repl)
 The kernel can:
 
 - execute Lean 4 commands (including definitions, theorems, etc.)
-- execute Lean 4 tatics with magic like `% proof` immediately after a `sorry`ed theorem
+- execute Lean 4 tactics with magic like `% proof` immediately after a `sorry`ed theorem
 - backtrack to earlier environment or proof states with magic like `% env 1` or `% prove 3`
 - support magics like [`%cd`](https://nbviewer.org/github/utensil/lean4_jupyter/blob/v0.0.1/examples/01_cd.ipynb?flush_cache=true) or [`%load`](https://nbviewer.org/github/utensil/lean4_jupyter/blob/v0.0.1/examples/02_load.ipynb?flush_cache=true) (loading a file)
 - support for importing modules from projects and their dependencies, e.g. `Mathlib` ( [demo](https://nbviewer.org/github/utensil/lean4_jupyter/blob/v0.0.1/examples/03_import.ipynb?flush_cache=true) ).
