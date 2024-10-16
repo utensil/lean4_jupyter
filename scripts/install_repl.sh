@@ -16,10 +16,9 @@ fi
 
 cd .lean4_jupyter/repl
 lake build
-# if repl exists
-if [ -f /usr/local/bin/repl ]; then
-  rm /usr/local/bin/repl
-fi
+# if [ -f /usr/local/bin/repl ]; then
+#   rm /usr/local/bin/repl
+# fi
 ln -s $DIR/../.lean4_jupyter/repl/.lake/build/bin/repl /usr/local/bin/repl
 ls -lhta /usr/local/bin/repl
 echo '{"cmd": "#eval Lean.versionString"}'|repl
