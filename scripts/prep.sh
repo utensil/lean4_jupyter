@@ -12,8 +12,9 @@ REPL_HOME=$PROJECT_ROOT/.lean4_jupyter/repl
 rm -rf $REPL_HOME || echo "No .lean4_jupyter/repl to clean up"
 rm /usr/local/bin/repl || echo "No /usr/local/bin/repl to clean up"
 
-# repl is not bumped to leanprover/lean4:v4.8.0-rc2 yet
-elan default leanprover/lean4:v4.8.0-rc1
+# NOTE: this has to be the same as repl at all times
+# setting default is a hack, to avoid issues of not having the right version
+elan default leanprover/lean4:v4.11.0
 
 # install the Lean REPL
 $SCRIPT_DIR/install_repl.sh
