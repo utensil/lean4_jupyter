@@ -15,6 +15,8 @@ else
 fi
 
 cd .lean4_jupyter/repl
+# Fix to leanprover/lean4:v4.11.0
+git checkout adbbfcb9d4e61c12db96c45d227de92f21cc17dd
 lake build
 # if [ -f /usr/local/bin/repl ]; then
 #   rm /usr/local/bin/repl
