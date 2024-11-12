@@ -11,7 +11,7 @@ A Lean 4 Jupyter kernel via [repl](https://github.com/leanprover-community/repl)
 [![Static Badge](https://img.shields.io/badge/test-nbval-purple)](https://github.com/computationalmodelling/nbval)
 [![Maintainability](https://api.codeclimate.com/v1/badges/666a7d45d436a598df2b/maintainability)](https://codeclimate.com/github/utensil/lean4_jupyter/maintainability)
 
-## What's already working
+## Features
 
 🔥 See it in action: [Tutorial notebook](https://nbviewer.org/github/utensil/lean4_jupyter/blob/18e8d701982d640aa443195f5ca287eec45313e3/examples/00_tutorial.ipynb?flush_cache=true).
 
@@ -52,18 +52,54 @@ The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and test
 
 If you are interested in one of these TODOs, or you have some other nice features in mind, you may raise the discussion by opening an issue or discuss it in the [Zulip topic](https://leanprover.zulipchat.com/#narrow/stream/113488-general/topic/lean4_jupyter.3A.20A.20Lean.204.20Jupyter.20kernel.20via.20repl).
 
-## Installation
+## Getting started
 
-First, you need a working Lean 4 installation. You can install it via [elan](https://github.com/leanprover/elan).
+### Prerequisites
 
-Verify that `lean` and `lake` is in your `PATH`:
+1. You need a working Lean 4 installation. You can install it via [elan](https://github.com/leanprover/elan), e.g. on Linux-like systems:
+
+```bash
+curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | bash -s -- -y --default-toolchain none
+```
+
+2. You need a working Python (e.g. 3.11). If you prefer to use a virtual environment, you need to activate it before installing the kernel.
+
+### Installation script
+
+The following script will install a `repl` of a compatible Lean 4 toolchain, the kernel, and prepare the demo Lean 4 project.
+
+```bash
+git clone https://github.com/utensil/lean4_jupyter.git && cd lean4_jupyter && ./scripts/prep.sh
+```
+
+Note: the script could remove an existing `repl`, and it assumes `/usr/local/bin` is in your `PATH`. 
+
+If you prefer manual installation, please read __Manual installation__ below.
+
+To use it, run one of:
+
+```bash
+# Web UI
+jupyter notebook
+jupyter lab
+
+# Console UI
+# hint: use Ctrl-D and confirm with y to exit
+jupyter console --kernel lean4
+# hint: you need to run `pip install PyQt5 qtconsole` to install it
+jupyter qtconsole --kernel lean4
+```
+then open notebooks in the `examples` folder to familiarize yourself with the basic usage.
+
+### Manual installation
+
+First, verify that `lean` and `lake` is in your `PATH`:
 
 ```bash
 lean --version
 lake --help|head -n 1
 ```
-
-they should output Lean/Lake versions, respectively.
+they should output Lean/Lake versions, respectively. If not, you can install them via [elan](https://github.com/leanprover/elan).
 
 Then, you need to have a working `repl` in your `PATH`.
 
@@ -92,7 +128,11 @@ pip install notebook
 Then, install the kernel:
 
 ```bash
+# Option 1: Install from PyPI
+# The PyPI package should work with Lean leanprover/lean4:v4.8.0-rc1
 pip install lean4_jupyter
+# Option 2: (Recommended) install the latest version from the repo
+pip install git+https://github.com/utensil/lean4_jupyter.git
 # or in development mode, check out the repo then run
 # pip install -e .
 python -m lean4_jupyter.install
