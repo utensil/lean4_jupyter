@@ -134,7 +134,7 @@ Then, install the kernel:
 # Option 1: Install from PyPI
 # see "Support matrix" for the tested versions
 pip install lean4_jupyter
-# Option 2: (Recommended) install the latest version from the repo
+# Option 2 (recommended): install the latest version from the repo
 pip install git+https://github.com/utensil/lean4_jupyter.git
 # or in development mode, check out the repo then run
 # pip install -e .
@@ -176,7 +176,8 @@ This also serves as a human-friendly way to understand how Lean 4 repl works, fo
 ## Support matrix
 
 | `lean4_jupyter` | Tested Lean 4 toolchain | Tested Python version |
-|------------------|------------------------|----------------------|
-| 0.0.1           | v4.8.0-rc1              | 3.11.0               |
-| 0.0.2           | v4.11.0                 |3.11.0                |
+| --------------- | ----------------------- | --------------------  |
+| 0.0.1           | v4.8.0-rc1              | 3.11.0                |
+| 0.0.2           | v4.11.0                 |3.11.0                 |
+| git main        | v4.11.0                 | 3.11.0                |
 
