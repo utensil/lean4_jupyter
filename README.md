@@ -75,7 +75,7 @@ The following script will install a `repl` of a compatible Lean 4 toolchain, the
 git clone https://github.com/utensil/lean4_jupyter.git && cd lean4_jupyter && ./scripts/prep.sh
 ```
 
-Note: the script could remove an existing `repl`, and it assumes `/usr/local/bin` is in your `PATH`. 
+Note: the script could remove an existing `repl`, and it assumes `/usr/local/bin` is in your `PATH`, it will also set the default Lean 4 toolchain to the same as the one used by the `repl` to ensure `repl` works outside projects.
 
 If you prefer manual installation, please read __Manual installation__ below.
 

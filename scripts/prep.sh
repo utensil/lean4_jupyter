@@ -14,7 +14,7 @@ rm /usr/local/bin/repl || echo "No /usr/local/bin/repl to clean up"
 
 # NOTE: this has to be the same as repl at all times
 # setting default is a hack, to avoid issues of not having the right version
-# elan default leanprover/lean4:v4.11.0
+elan default leanprover/lean4:v4.11.0
 
 # install the Lean REPL
 "$SCRIPT_DIR"/install_repl.sh
@@ -29,7 +29,8 @@ rm /usr/local/bin/repl || echo "No /usr/local/bin/repl to clean up"
 pip uninstall alectryon -y
 
 # install the Lean4 Jupyter kernel
-pip install -f -e "$PROJECT_ROOT[test]"
+echo "${PROJECT_ROOT}[test]"
+pip install -f -e "${PROJECT_ROOT}[test]"
 python -m lean4_jupyter.install
 
 # prepare demo_proj
