@@ -33,6 +33,9 @@ The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and test
 
 ## What's next
 
+- Add support for [Quarto](https://quarto.org/), possibly integrate with [Molten](https://github.com/benlubas/molten-nvim) in Neovim
+- Add support for [Incrementality](https://lean-lang.org/blog/2024-7-1-lean-490/), see also [repl#57](https://github.com/leanprover-community/repl/pull/57)
+- Make use of [Goal State Diffing](https://leanprover.zulipchat.com/#narrow/channel/113488-general/topic/lean.2Envim/near/478572115)
 - Improve the syntax highlighting in the WebUI, currently it sees Lean 4 as Python
 - Improve the alectryon annotation to support annotations in the middle of a line
 - Provide a switch to use codespan instead of alectryon in the WebUI, or a way to see warnings and errors without hovering or clicking
@@ -157,6 +160,8 @@ jupyter qtconsole --kernel lean4
 I've always wanted to do literate programming with Lean 4 in Jupyter, but Lean LSP and Infoview in VS Code has provided an immersive experience with immediate feedback, so I could never imagine a better way to interact with Lean 4, until interacting with repl makes me believe that _limitless backtrack_ is another feature that best accompanies the _reproducible interactivity_ of alectryon style annotations.
 
 The idea came to me in an afternoon, and I thought it's technically trivial to implement overnight thanks to repl. It took me a bit longer to work out the logistics of UX and polish the code, but it's fun to see the potential.
+
+This also serves as a human-friendly way to understand how Lean 4 repl works, for integrating repl with ML systems.
 
 ## Inspired by
 
