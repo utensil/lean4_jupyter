@@ -132,7 +132,7 @@ Then, install the kernel:
 
 ```bash
 # Option 1: Install from PyPI
-# The PyPI package should work with Lean leanprover/lean4:v4.8.0-rc1
+# see "Support matrix" for the tested versions
 pip install lean4_jupyter
 # Option 2: (Recommended) install the latest version from the repo
 pip install git+https://github.com/utensil/lean4_jupyter.git
@@ -172,3 +172,11 @@ This also serves as a human-friendly way to understand how Lean 4 repl works, fo
 - [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library)
 - [codespan](https://github.com/brendanzab/codespan)
 - [lean-lsp](https://github.com/utensil/lean-lsp) (My previous attempt to make a Lean 4 Jupyter kernel using Lean 4 LSP server)
+
+## Support matrix
+
+| `lean4_jupyter` | Tested Lean 4 toolchain | Tested Python version |
+|------------------|------------------------|----------------------|
+| 0.0.1           | v4.8.0-rc1              | 3.11.0               |
+| 0.0.2           | v4.11.0                 |3.11.0                |
+
