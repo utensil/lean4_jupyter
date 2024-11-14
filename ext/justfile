@@ -15,4 +15,7 @@ init:
     copier copy --trust https://github.com/jupyterlab/extension-template .
 
 install:
-    pip install -e "." 
+    # so the ts compilation issues are catched early
+    jlpm build 
+    pip install -e "."
+    jupyter labextension develop . --overwrite

@@ -7,7 +7,7 @@ has_binder: true
 has_settings: false
 kind: frontend
 labextension_name: jupyterlab-lean4-codemirror-extension
-project_short_description: A JupyterLab extension for adding Lean 4 mode to CodeMirror
+project_short_description: A JupyterLab extension for CodeMirror Lean 4 mode
 python_name: jupyterlab_lean4_codemirror_extension
 repository: https://github.com/utensil/lean4_jupyter
 test: true

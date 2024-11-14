@@ -1,18 +1,18 @@
-
-/// <reference path="../node_modules/@jupyterlab/codemirror/typings/codemirror/codemirror.d.ts" />
-
 import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 
 import {
-  ICodeMirror
+  EditorExtensionRegistry,
+  IEditorExtensionRegistry
 } from '@jupyterlab/codemirror';
 
-// import { defineMode, defineMIME } from 'codemirror';
+// Following https://github.com/codemirror/legacy-modes
+import { StreamLanguage } from "@codemirror/language"
+import { basicSetup } from "codemirror"
 
-function defineLean4mode(code_mirror: any) {
+function getLean4mode() {
 
   function words(str: string): { [key: string]: boolean } {
     const obj: { [key: string]: boolean } = {};
@@ -89,40 +89,62 @@ function defineLean4mode(code_mirror: any) {
     };
   }
 
-  code_mirror.defineMode("lean4", function() {
-    return {
-      startState: function() {
-        return { tokenize: tokenBase };
-      },
-      token: function(stream: any, state: any) {
-        return state.tokenize(stream, state);
-      },
-      lineComment: "--",
-      blockCommentStart: "/-",
-      blockCommentEnd: "-/"
-    };
-  });
+  // code_mirror.defineMode("lean4", function() {
+  return {
+    startState: function() {
+      return { tokenize: tokenBase };
+    },
+    token: function(stream: any, state: any) {
+      return state.tokenize(stream, state);
+    },
+    lineComment: "--",
+    blockCommentStart: "/-",
+    blockCommentEnd: "-/"
+  };
+  // });
 
-  code_mirror.defineMIME("text/x-lean4", "lean4");
+  // code_mirror.defineMIME("text/x-lean4", "lean4");
 
-  code_mirror.modeInfo.push({
-    ext: ['lean'],
-    mime: 'text/x-lean4',
-    mode: 'lean4',
-    name: 'Lean 4'
-  });
+  // code_mirror.modeInfo.push({
+  //   ext: ['lean'],
+  //   mime: 'text/x-lean4',
+  //   mode: 'lean4',
+  //   name: 'Lean 4'
+  // });
 }
 
+// const plugin: JupyterFrontEndPlugin<void> = {
+//   id: 'jupyterlab-lean4-codemirror-extension:plugin',
+//   autoStart: true,
+//   requires: [ICodeMirror],
+//   activate: (app: JupyterFrontEnd, codeMirror: ICodeMirror) => {
+//     defineLean4mode(codeMirror.CodeMirror);
+//     console.log('JupyterLab extension for Lean 4 mode is activated!');
+//   }
+// };
 
+/**
+ * Initialization data for the jupyterlab-lean4-codemirror-extension extension.
+ *
+ * Following https://github.com/jupyterlab/extension-examples/tree/main/codemirror-extension
+ */
 const plugin: JupyterFrontEndPlugin<void> = {
-  id: 'jupyterlab_prolog_codemirror_extension:plugin',
+  id: 'jupyterlab-lean4-codemirror-extension:plugin',
+  description: 'A JupyterLab extension for CodeMirror Lean 4 mode',
   autoStart: true,
-  requires: [ICodeMirror],
-  activate: (app: JupyterFrontEnd, codeMirror: ICodeMirror) => {
-    defineLean4mode(codeMirror.CodeMirror);
-    console.log('JupyterLab extension for Lean 4 mode is activated!');
+  requires: [IEditorExtensionRegistry],
+  activate: (app: JupyterFrontEnd, extensions: IEditorExtensionRegistry) => {
+    extensions.addExtension(
+      Object.freeze({
+        name: 'codemirror:lean4',
+        factory: () =>
+          EditorExtensionRegistry.createConfigurableExtension(() =>
+            [basicSetup, StreamLanguage.define(getLean4mode())]
+          ),
+      })
+    );
+    console.log('JupyterLab extension jupyterlab-lean4-codemirror-extension is activated!');
   }
 };
-
 
 export default plugin;
