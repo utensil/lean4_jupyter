@@ -145,10 +145,14 @@ To use it, run one of:
 
 ```bash
 # Web UI
+
+# hint: run `pip install notebook` to install it
 jupyter notebook
+# hint: run `pip install juptyerlab` to install it
 jupyter lab
 
 # Console UI
+
 # hint: use Ctrl-D and confirm with y to exit
 jupyter console --kernel lean4
 # hint: you need to run `pip install PyQt5 qtconsole` to install it
@@ -178,6 +182,6 @@ This also serves as a human-friendly way to understand how Lean 4 repl works, fo
 | `lean4_jupyter` | Tested Lean 4 toolchain | Tested Python version |
 | --------------- | ----------------------- | --------------------  |
 | 0.0.1           | v4.8.0-rc1              | 3.11.0                |
-| 0.0.2           | v4.11.0                 |3.11.0                 |
-| git main        | v4.11.0                 | 3.11.0                |
+| 0.0.2           | v4.11.0                 | 3.11.0                 |
+| 0.0.3-dev (git main)       | v4.11.0                 | 3.13.0 (jupyterlab: 4.3.0)                |
 
