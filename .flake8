@@ -2,3 +2,4 @@
 max-line-length = 100
 exclude =
   examples
+  ext
