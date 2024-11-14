@@ -89,7 +89,6 @@ function getLean4mode() {
     };
   }
 
-  // code_mirror.defineMode("lean4", function() {
   return {
     startState: function() {
       return { tokenize: tokenBase };
@@ -101,27 +100,8 @@ function getLean4mode() {
     blockCommentStart: "/-",
     blockCommentEnd: "-/"
   };
-  // });
 
-  // code_mirror.defineMIME("text/x-lean4", "lean4");
-
-  // code_mirror.modeInfo.push({
-  //   ext: ['lean'],
-  //   mime: 'text/x-lean4',
-  //   mode: 'lean4',
-  //   name: 'Lean 4'
-  // });
 }
-
-// const plugin: JupyterFrontEndPlugin<void> = {
-//   id: 'jupyterlab-lean4-codemirror-extension:plugin',
-//   autoStart: true,
-//   requires: [ICodeMirror],
-//   activate: (app: JupyterFrontEnd, codeMirror: ICodeMirror) => {
-//     defineLean4mode(codeMirror.CodeMirror);
-//     console.log('JupyterLab extension for Lean 4 mode is activated!');
-//   }
-// };
 
 /**
  * Initialization data for the jupyterlab-lean4-codemirror-extension extension.
@@ -148,3 +128,4 @@ const plugin: JupyterFrontEndPlugin<void> = {
 };
 
 export default plugin;
+
