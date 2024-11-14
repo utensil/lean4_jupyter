@@ -1,0 +1,14 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.3.5
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: utensilcandel@gmail.com
+author_name: Lean 4 mode
+has_binder: true
+has_settings: false
+kind: frontend
+labextension_name: jupyterlab-lean4-codemirror-extension
+project_short_description: A JupyterLab extension for adding Lean 4 mode to CodeMirror
+python_name: jupyterlab_lean4_codemirror_extension
+repository: https://github.com/utensil/lean4_jupyter
+test: true
+
