@@ -80,10 +80,16 @@ jlpm build
 # echo "Creating kernel..."
 # "$VENV_DIR/bin/python" -m ipykernel install
 
-# Install in development mode
-echo "Installing in development mode..."
-"$PIP" install -e .
-jupyter-labextension develop . --overwrite
+# Install in development or production mode
+if [ -n "$L4J_DEV" ]; then
+  echo "Installing in development mode..."
+  "$PIP" install -e .
+  jupyter-labextension develop . --overwrite
+else
+  echo "Installing in production mode..."
+  "$PIP" install .
+  jupyter-labextension install .
+fi
 
 # Verify installations
 echo "Verifying kernel installation..."

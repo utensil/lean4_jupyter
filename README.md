@@ -166,15 +166,15 @@ node -v
 pip install ipykernel jupyterlab jupyter_packaging
 ```
 
-3. Clone the repository (if not already done) and build the extension:
+3. Clone the repository (if not already done) and install the extension:
 
 ```bash
 git clone https://github.com/utensil/lean4_jupyter.git
 cd lean4_jupyter/ext
 jlpm install
 jlpm build
-pip install -e .
-jupyter-labextension develop . --overwrite
+pip install .
+jupyter-labextension install .
 ```
 
 4. Verify the installation:
