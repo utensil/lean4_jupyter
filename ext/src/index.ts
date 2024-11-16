@@ -39,11 +39,15 @@ function getLean4mode() {
     }
 
     // Handle strings with match for better performance
-    if (stream.match(/"[^"]*"/)) return "string";
-    if (stream.match(/'[^']*'/)) return "string";
+    // Handle strings with escape sequences
+    if (stream.match(/"/)) {
+      state.tokenize = tokenString;
+      return tokenString(stream, state);
+    }
 
-    // Handle numbers more efficiently
-    if (stream.match(/\d+(\.\d+)?/)) return "number";
+    // Handle numbers including scientific notation
+    if (stream.match(/(\d+\.\d*)([eE][+-]?[0-9]+)?/) || 
+        stream.match(/\d+/)) return "number";
 
     // Handle keywords and identifiers first (including dot notation)
     const word = stream.match(/#?[\w$_]+(?:\.[\w$_]+)*/);
@@ -67,21 +71,37 @@ function getLean4mode() {
     return null;
   }
 
-  function tokenComment(stream: any, state: any): string {
-    const maxChars = 10000; // Prevent infinite loops
-    let chars = 0;
-
-    while (!stream.eol() && chars < maxChars) {
-      chars++;
-      if (stream.match("-/")) {
-        state.tokenize = tokenBase;
-        return "comment";
+  function tokenString(stream: any, state: any): string {
+    let escaped = false;
+    while (!stream.eol()) {
+      if (!escaped && stream.match(/\\[n"\\\n]/)) {
+        escaped = true;
+        continue;
       }
-      stream.next();
+      if (!escaped && stream.next() === '"') {
+        state.tokenize = tokenBase;
+        return "string";
+      }
+      escaped = false;
     }
+    return "string";
+  }
 
-    if (chars >= maxChars) {
-      state.tokenize = tokenBase;
+  function tokenComment(stream: any, state: any): string {
+    let nested = 1;
+    while (!stream.eol()) {
+      const ch = stream.next();
+      if (ch === '/' && stream.peek() === '-') {
+        stream.next();
+        nested++;
+      } else if (ch === '-' && stream.peek() === '/') {
+        stream.next();
+        nested--;
+        if (nested === 0) {
+          state.tokenize = tokenBase;
+          return "comment";
+        }
+      }
     }
     return "comment";
   }
