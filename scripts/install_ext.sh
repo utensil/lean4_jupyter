@@ -53,7 +53,7 @@ yarn build
 
 # Install required Python packages
 echo "Installing Python dependencies..."
-"$VENV_DIR/bin/pip" install ipykernel jupyterlab
+"$VENV_DIR/bin/pip" install ipykernel jupyterlab jupyter_packaging
 
 # Create custom kernel for this virtual environment
 echo "Creating custom kernel..."
