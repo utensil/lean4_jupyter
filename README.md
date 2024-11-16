@@ -141,6 +141,54 @@ pip install git+https://github.com/utensil/lean4_jupyter.git
 python -m lean4_jupyter.install
 ```
 
+### Installing the JupyterLab Extension
+
+To enhance your JupyterLab experience with Lean 4, you can install the JupyterLab extension:
+
+1. **Install Node.js**: Ensure you have Node.js installed. If not, or if your version is below 22.0.0, use `nvm` to install Node.js version 22:
+
+   ```bash
+   # Install nvm if not present
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+   export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+   nvm install 22
+   nvm use 22
+   ```
+
+2. **Install Python Dependencies**: Install the necessary Python packages:
+
+   ```bash
+   pip install ipykernel jupyterlab jupyter_packaging
+   ```
+
+3. **Navigate to Extension Directory**: Change to the extension directory:
+
+   ```bash
+   cd ext
+   ```
+
+4. **Install the Extension**: Run the following commands to install and build the extension:
+
+   ```bash
+   jlpm install
+   jlpm build
+   ```
+
+5. **Install in Development Mode**: Install the extension in development mode:
+
+   ```bash
+   pip install -e .
+   jupyter-labextension develop . --overwrite
+   ```
+
+6. **Verify Installations**: Check if the kernel and extension are installed correctly:
+
+   ```bash
+   jupyter kernelspec list
+   jupyter-labextension list
+   ```
+
 To use it, run one of:
 
 ```bash
