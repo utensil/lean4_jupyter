@@ -18,9 +18,9 @@ fi
 echo "Activating virtual environment..."
 source "$VENV_DIR/bin/activate"
 
-# Check if nvm is installed, install if not present
-if [ ! -d "${NVM_DIR:-$HOME/.nvm}" ]; then
-  echo "nvm not found. Installing nvm..."
+# Check if nvm is working
+if ! command -v nvm >/dev/null 2>&1; then
+  echo "Working nvm installation not found. Installing nvm..."
   export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
   # Download and run the install script
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
