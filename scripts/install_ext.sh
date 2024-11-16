@@ -55,9 +55,9 @@ yarn build
 echo "Installing Python dependencies..."
 "$VENV_DIR/bin/pip" install ipykernel jupyterlab jupyter_packaging
 
-# Create custom kernel for this virtual environment
-echo "Creating custom kernel..."
-"$VENV_DIR/bin/python" -m ipykernel install --user --name="lean4_jupyter_dev"
+# Create kernel for this virtual environment
+echo "Creating kernel..."
+"$VENV_DIR/bin/python" -m ipykernel install
 
 # Install in development mode
 echo "Installing in development mode..."
