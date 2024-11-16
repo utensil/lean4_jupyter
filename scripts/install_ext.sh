@@ -50,8 +50,8 @@ jlpm build
 
 # Install in development mode
 echo "Installing in development mode..."
-pip install -e .
-jupyter labextension develop . --overwrite
+"$VENV_DIR/bin/pip" install -e .
+"$VENV_DIR/bin/jupyter" labextension develop . --overwrite
 
 # Verify installation
 jupyter labextension list

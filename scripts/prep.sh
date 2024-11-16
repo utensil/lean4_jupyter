@@ -36,12 +36,12 @@ elan default leanprover/lean4:v4.11.0
 # fi
 
 # force uninstall alectryon
-pip uninstall alectryon -y
+"$VENV_DIR/bin/pip" uninstall alectryon -y
 
 # install the Lean4 Jupyter kernel
 echo "${PROJECT_ROOT}[test]"
-(cd "$PROJECT_ROOT" && pip install -f -e '.[test]')
-python -m lean4_jupyter.install
+(cd "$PROJECT_ROOT" && "$VENV_DIR/bin/pip" install -e '.[test]')
+"$VENV_DIR/bin/python" -m lean4_jupyter.install
 
 # Install the JupyterLab extension
 "$SCRIPT_DIR"/install_ext.sh
