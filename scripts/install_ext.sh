@@ -40,13 +40,16 @@ fi
 nvm install --lts
 nvm use --lts
 
+# Install yarn globally
+npm install -g yarn
+
 # Navigate to extension directory
 cd "$EXT_DIR"
 
 # Install the extension
 echo "Installing the JupyterLab extension..."
-jlpm install
-jlpm build
+yarn install
+yarn build
 
 # Install ipykernel in virtual environment
 echo "Installing ipykernel..."
