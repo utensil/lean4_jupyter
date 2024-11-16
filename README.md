@@ -120,7 +120,7 @@ In case `repl` hangs, you could kill it with
 ps aux|grep repl|grep -v grep|awk '{print $2}'|xargs kill -9
 ```
 
-Then, ensure that you have `python`, `pip` installed, and install Jupyter:
+4. Ensure that you have `python`, `pip` installed, and install Jupyter:
 
 ```bash
 pip install notebook
