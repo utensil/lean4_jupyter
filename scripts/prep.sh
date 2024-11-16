@@ -33,6 +33,9 @@ echo "${PROJECT_ROOT}[test]"
 pip install -f -e "${PROJECT_ROOT}[test]"
 python -m lean4_jupyter.install
 
+# Install the JupyterLab extension
+"$SCRIPT_DIR"/install_ext.sh
+
 # prepare demo_proj
 cd examples/demo_proj
 lake exe cache get && lake build
