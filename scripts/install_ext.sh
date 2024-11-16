@@ -9,20 +9,27 @@ PROJECT_ROOT=$SCRIPT_DIR/..
 EXT_DIR=$PROJECT_ROOT/ext
 VENV_DIR=$PROJECT_ROOT/.venv
 
-# Create virtual environment if it doesn't exist
-if [ ! -d "$VENV_DIR" ]; then
-  echo "Creating new virtual environment..."
-  python3 -m venv "$VENV_DIR"
-else
-  echo "Using existing virtual environment..."
-fi
+# Only create/use venv if not in CI
+if [ -z "$CI" ]; then
+  if [ ! -d "$VENV_DIR" ]; then
+    echo "Creating new virtual environment..."
+    python3 -m venv "$VENV_DIR"
+  else
+    echo "Using existing virtual environment..."
+  fi
 
-echo "Activating virtual environment..."
-source "$VENV_DIR/bin/activate"
+  echo "Activating virtual environment..."
+  source "$VENV_DIR/bin/activate"
+  PIP="$VENV_DIR/bin/pip"
+  PYTHON="$VENV_DIR/bin/python"
+else
+  PIP="pip"
+  PYTHON="python"
+fi
 
 # Update pip in virtual environment
 echo "Updating pip..."
-"$VENV_DIR/bin/python" -m pip install --upgrade pip
+"$PYTHON" -m pip install --upgrade pip
 
 # Check if node is installed and meets minimum version
 if ! command -v node >/dev/null 2>&1; then
@@ -59,7 +66,7 @@ fi
 
 # Install required Python packages
 echo "Installing Python dependencies..."
-"$VENV_DIR/bin/pip" install ipykernel jupyterlab jupyter_packaging
+"$PIP" install ipykernel jupyterlab jupyter_packaging
 
 # Navigate to extension directory
 cd "$EXT_DIR"
@@ -75,13 +82,13 @@ jlpm build
 
 # Install in development mode
 echo "Installing in development mode..."
-"$VENV_DIR/bin/pip" install -e .
-"$VENV_DIR/bin/jupyter-labextension" develop . --overwrite
+"$PIP" install -e .
+jupyter-labextension develop . --overwrite
 
 # Verify installations
 echo "Verifying kernel installation..."
-"$VENV_DIR/bin/jupyter" kernelspec list
+jupyter kernelspec list
 echo "Verifying extension installation..."
-"$VENV_DIR/bin/jupyter-labextension" list
+jupyter-labextension list
 
 echo "JupyterLab extension installation completed successfully"
