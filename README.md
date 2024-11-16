@@ -141,6 +141,12 @@ pip install git+https://github.com/utensil/lean4_jupyter.git
 python -m lean4_jupyter.install
 ```
 
+To verify that the kernel is installed correctly, run:
+
+```bash
+jupyter kernelspec list
+```
+
 #### (Optional) Installing the JupyterLab Extension
 
 If you are using JupyterLab, you can install the JupyterLab extension to enhance your experience:
@@ -173,10 +179,9 @@ If you are using JupyterLab, you can install the JupyterLab extension to enhance
    jupyter-labextension develop . --overwrite
    ```
 
-6. **Verify Installations**: Check if the kernel and extension are installed correctly:
+6. **Verify Installations**: Check if the extension is installed correctly:
 
    ```bash
-   jupyter kernelspec list
    jupyter-labextension list
    ```
 
