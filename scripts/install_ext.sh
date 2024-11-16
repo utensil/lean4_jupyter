@@ -33,11 +33,9 @@ nvm use --lts
 # Navigate to extension directory
 cd "$EXT_DIR"
 
-# Build and install the extension
-echo "Building and installing the JupyterLab extension..."
-jlpm
-jlpm build
-pip install -e "."
-jupyter labextension develop . --overwrite
+# Install the extension
+echo "Installing the JupyterLab extension..."
+pip install .
+jupyter labextension list
 
-echo "JupyterLab extension installation completed"
+echo "JupyterLab extension installation completed successfully"
