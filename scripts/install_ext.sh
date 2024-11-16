@@ -18,27 +18,38 @@ fi
 echo "Activating virtual environment..."
 source "$VENV_DIR/bin/activate"
 
-# Check if nvm is working
-if ! command -v nvm >/dev/null 2>&1; then
-  echo "Working nvm installation not found. Installing nvm..."
-  export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-  # Download and run the install script
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+# Check if node is installed and meets minimum version
+if ! command -v node >/dev/null 2>&1; then
+    echo "Node.js not found. Installing via nvm..."
+    install_nvm=true
+else
+    node_version=$(node -v | cut -d'v' -f2)
+    required_version="22.0.0"
+    if [ "$(printf '%s\n' "$required_version" "$node_version" | sort -V | head -n1)" = "$required_version" ]; then
+        echo "Node.js version $node_version is sufficient"
+        install_nvm=false
+    else
+        echo "Node.js version $node_version is below required version $required_version. Installing via nvm..."
+        install_nvm=true
+    fi
 fi
 
-# Load nvm
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+if [ "$install_nvm" = true ]; then
+    # Install nvm if not present
+    if ! command -v nvm >/dev/null 2>&1; then
+        echo "Installing nvm..."
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    fi
 
-# Verify nvm is available
-if ! command -v nvm &>/dev/null; then
-  echo "Failed to load nvm. Please check your installation."
-  exit 1
+    # Load nvm
+    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+    # Install and use Node.js version 22
+    nvm install 22
+    nvm use 22
 fi
-
-# Install and use Node.js LTS version
-nvm install --lts
-nvm use --lts
 
 # Install yarn globally
 npm install -g yarn
