@@ -43,6 +43,10 @@ echo "${PROJECT_ROOT}[test]"
 (cd "$PROJECT_ROOT" && "$VENV_DIR/bin/pip" install -e '.[test]')
 "$VENV_DIR/bin/python" -m lean4_jupyter.install
 
+# Install ipykernel in virtual environment
+"$VENV_DIR/bin/pip" install ipykernel
+"$VENV_DIR/bin/python" -m ipykernel install --user --name="lean4_jupyter_dev"
+
 # Install the JupyterLab extension
 "$SCRIPT_DIR"/install_ext.sh
 

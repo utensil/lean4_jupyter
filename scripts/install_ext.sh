@@ -48,12 +48,23 @@ echo "Installing the JupyterLab extension..."
 jlpm install
 jlpm build
 
+# Install ipykernel in virtual environment
+echo "Installing ipykernel..."
+"$VENV_DIR/bin/pip" install ipykernel
+
+# Create custom kernel for this virtual environment
+echo "Creating custom kernel..."
+"$VENV_DIR/bin/python" -m ipykernel install --user --name="lean4_jupyter_dev"
+
 # Install in development mode
 echo "Installing in development mode..."
 "$VENV_DIR/bin/pip" install -e .
 "$VENV_DIR/bin/jupyter" labextension develop . --overwrite
 
-# Verify installation
-jupyter labextension list
+# Verify installations
+echo "Verifying kernel installation..."
+jupyter kernelspec list
+echo "Verifying extension installation..."
+"$VENV_DIR/bin/jupyter" labextension list
 
 echo "JupyterLab extension installation completed successfully"
