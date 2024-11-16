@@ -23,15 +23,15 @@ function getLean4mode() {
     return obj;
   }
 
-  const keywords1 = words("import unif_hint renaming inline hiding lemma variable theorem axiom inductive structure universe alias #help precedence postfix prefix infix infixl infixr notation #eval #check #reduce #exit end private using namespace instance section protected export set_option extends open example #print opaque def macro elab syntax macro_rules #reduce where abbrev noncomputable class attribute #synth mutual scoped local noncomputable theory parameter parameters variable variables reserve precedence postfix prefix notation infix infixl infixr begin by end set_option run_cmd");
+  const keywords1 = words("import unif_hint renaming inline hiding lemma variable theorem axiom inductive structure universe alias #help precedence postfix prefix infix infixl infixr notation #eval #check #reduce #exit end private using namespace instance section protected export set_option extends open example #print opaque def macro elab syntax macro_rules #reduce where abbrev noncomputable class attribute #synth mutual scoped local noncomputable theory parameter parameters variable variables reserve precedence postfix prefix notation infix infixl infixr begin by end set_option run_cmd #align #align_import");
 
-  const keywords2 = words("forall fun obtain from have show assume let if else then by in with calc match nomatch do at suffices");
+  const keywords2 = words("forall fun obtain from have show assume let if else then by in with calc match nomatch do at suffices sorry admit");
 
   const keywords3 = words("Type Prop Sort");
 
-  const operators = words("!= # & && * + - / @ ! -. -> . .. ... :: :> ; ;; < <- = == > _ | || ~ => <= >= /\\ \\/ ∀ Π λ ↔ ∧ ∨ ≠ ≤ ≥ ¬ ⁻¹ ⬝ ▸ → ∃ ≈ × ⌞ ⌟ ≡ ⟨ ⟩ ↦");
+  const operators = words("!= # & && * + - / @ ! -. -> . .. ... :: :> ; ;; < <- = == > _ | || ~ => <= >= /\\ \\/ ∀ Π λ ↔ ∧ ∨ ≠ ≤ ≥ ¬ ⁻¹ ⬝ ▸ → ∃ ≈ × ⌞ ⌟ ≡ ⟨ ⟩ ↦ ⋮ ▸ ⊆ ⊇ ∈ ∉");
 
-  const punctuation = words("( ) : { } [ ] ⦃ ⦄ := , ‹ ›");
+  const punctuation = words("( ) : { } [ ] ⦃ ⦄ := , ‹ › ⟨ ⟩");
 
   function tokenBase(stream: any, state: any): string | null {
     if (stream.eatSpace()) return null;
@@ -55,7 +55,14 @@ function getLean4mode() {
 
     if (/\d/.test(ch)) {
       stream.eatWhile(/\d/);
-      if (stream.eat(".")) stream.eatWhile(/\d/);
+      if (stream.eat(".")) {
+        stream.eatWhile(/\d/);
+        if (stream.eat(/[eE]/)) {
+          stream.eat(/[+-]/);
+          stream.eatWhile(/\d/);
+        }
+        return "number";
+      }
       return "number";
     }
 
