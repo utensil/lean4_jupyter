@@ -162,3 +162,4 @@ cython_debug/
 # Custom
 .vscode/
 .lean4_jupyter/repl
+.aider*
