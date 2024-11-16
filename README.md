@@ -152,7 +152,7 @@ jupyter kernelspec list
 
 #### (Optional) Installing the JupyterLab Extension
 
-If you are using JupyterLab, you can install the JupyterLab extension to enhance your experience:
+If you are using JupyterLab, you can install the JupyterLab extension to enhance your experience with Lean 4 syntax highlighting for cells:
 
 1. **Install Node.js**: Ensure you have Node.js installed, and its version is at least 22.0.0. You can check the version by running `node -v`.
 
