@@ -51,6 +51,10 @@ if [ "$install_nvm" = true ]; then
     nvm use 22
 fi
 
+# Install required Python packages
+echo "Installing Python dependencies..."
+"$VENV_DIR/bin/pip" install ipykernel jupyterlab jupyter_packaging
+
 # Install yarn globally
 npm install -g yarn
 
@@ -62,9 +66,6 @@ echo "Installing the JupyterLab extension..."
 yarn install
 yarn build
 
-# Install required Python packages
-echo "Installing Python dependencies..."
-"$VENV_DIR/bin/pip" install ipykernel jupyterlab jupyter_packaging
 
 # Create kernel for this virtual environment
 echo "Creating kernel..."
