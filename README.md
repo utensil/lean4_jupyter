@@ -154,39 +154,34 @@ jupyter kernelspec list
 
 If you are using JupyterLab, you can install the JupyterLab extension to enhance your experience with Lean 4 syntax highlighting for cells:
 
-1. **Install Node.js**: Ensure you have Node.js installed, and its version is at least 22.0.0. You can check the version by running `node -v`.
+1. Ensure Node.js is installed (version 22.0.0 or higher):
 
-2. **Install Python Dependencies**: Install the necessary Python packages:
+```bash
+node -v
+```
 
-   ```bash
-   pip install ipykernel jupyterlab jupyter_packaging
-   ```
+2. Install Python dependencies:
 
-3. **Navigate to Extension Directory**: Change to the extension directory:
+```bash
+pip install ipykernel jupyterlab jupyter_packaging
+```
 
-   ```bash
-   cd ext
-   ```
+3. Clone the repository (if not already done) and build the extension:
 
-4. **Install the Extension**: Run the following commands to install and build the extension:
+```bash
+git clone https://github.com/utensil/lean4_jupyter.git
+cd lean4_jupyter/ext
+jlpm install
+jlpm build
+pip install -e .
+jupyter-labextension develop . --overwrite
+```
 
-   ```bash
-   jlpm install
-   jlpm build
-   ```
+4. Verify the installation:
 
-5. **Install in Development Mode**: Install the extension in development mode:
-
-   ```bash
-   pip install -e .
-   jupyter-labextension develop . --overwrite
-   ```
-
-6. **Verify Installations**: Check if the extension is installed correctly:
-
-   ```bash
-   jupyter-labextension list
-   ```
+```bash
+jupyter-labextension list
+```
 
 To use it, run one of:
 
