@@ -85,9 +85,6 @@ function getLean4mode() {
     return "comment";
   }
 
-  // Strings are now handled directly in tokenBase for better performance
-  }
-
   lean4Mode = {
     startState: function() {
       return { tokenize: tokenBase };
