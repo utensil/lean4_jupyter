@@ -59,12 +59,12 @@ function getLean4mode() {
       return "variable";
     }
 
-    // Then try to match operators as standalone tokens
-    const opMatch = stream.match(/[!@#$%^&*+\-=<>?/\\|:;.,]+/);
-    if (opMatch) {
-      const op = opMatch[0];
-      if (operators.has(op)) return "operator";
-      if (punctuation.has(op)) return "punctuation";
+    // Try to match operators and punctuation, longest matches first
+    for (const op of operators) {
+      if (stream.match(op, true)) return "operator";
+    }
+    for (const p of punctuation) {
+      if (stream.match(p, true)) return "punctuation";
     }
 
     stream.next();
