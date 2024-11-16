@@ -141,20 +141,11 @@ pip install git+https://github.com/utensil/lean4_jupyter.git
 python -m lean4_jupyter.install
 ```
 
-### Installing the JupyterLab Extension
+#### (Optional) Installing the JupyterLab Extension
 
-To enhance your JupyterLab experience with Lean 4, you can install the JupyterLab extension:
+If you are using JupyterLab, you can install the JupyterLab extension to enhance your experience:
 
-1. **Install Node.js**: Ensure you have Node.js installed. If not, or if your version is below 22.0.0, use `nvm` to install Node.js version 22:
-
-   ```bash
-   # Install nvm if not present
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-   export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-   nvm install 22
-   nvm use 22
-   ```
+1. **Install Node.js**: Ensure you have Node.js installed, and its version is at least 22.0.0. You can check the version by running `node -v`.
 
 2. **Install Python Dependencies**: Install the necessary Python packages:
 
