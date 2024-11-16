@@ -51,9 +51,9 @@ echo "Installing the JupyterLab extension..."
 yarn install
 yarn build
 
-# Install ipykernel in virtual environment
-echo "Installing ipykernel..."
-"$VENV_DIR/bin/pip" install ipykernel
+# Install required Python packages
+echo "Installing Python dependencies..."
+"$VENV_DIR/bin/pip" install ipykernel jupyterlab
 
 # Create custom kernel for this virtual environment
 echo "Creating custom kernel..."
