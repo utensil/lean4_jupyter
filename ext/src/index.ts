@@ -32,63 +32,60 @@ function getLean4mode() {
   function tokenBase(stream: any, state: any): string | null {
     if (stream.eatSpace()) return null;
 
-    const ch = stream.next();
-    if (ch === "/") {
-      if (stream.eat("/")) {
-        stream.skipToEnd();
-        return "comment";
-      }
-      if (stream.eat("*")) {
-        state.tokenize = tokenComment;
-        return tokenComment(stream, state);
-      }
+    // Handle comments first
+    if (stream.match("/-")) {
+      state.tokenize = tokenComment;
+      return tokenComment(stream, state);
     }
 
-    if (ch === '"' || ch === "'") {
-      state.tokenize = tokenString(ch);
-      return state.tokenize(stream, state);
+    // Handle strings with match for better performance
+    if (stream.match(/"[^"]*"/)) return "string";
+    if (stream.match(/'[^']*'/)) return "string";
+
+    // Handle numbers more efficiently
+    if (stream.match(/\d+(\.\d+)?/)) return "number";
+
+    // Try to match longer operators first
+    const opMatch = stream.match(/[!@#$%^&*+\-=<>?/\\|:;.,]+/);
+    if (opMatch) {
+      const op = opMatch[0];
+      if (operators.has(op)) return "operator";
+      if (punctuation.has(op)) return "punctuation";
     }
 
-    if (/\d/.test(ch)) {
-      stream.eatWhile(/\d/);
-      if (stream.eat(".")) {
-        stream.eatWhile(/\d/);
-      }
-      return "number";
+    // Handle keywords and identifiers
+    const word = stream.match(/[\w$_]+/);
+    if (word) {
+      const cur = word[0];
+      if (keywords1.has(cur)) return "keyword";
+      if (keywords2.has(cur)) return "keyword";
+      if (keywords3.has(cur)) return "keyword";
     }
 
-    stream.eatWhile(/[\w\$_]/);
-    const cur = stream.current();
-    if (keywords1.has(cur)) return "keyword";
-    if (keywords2.has(cur)) return "keyword";
-    if (keywords3.has(cur)) return "keyword";
-    if (operators.has(cur)) return "operator";
-    if (punctuation.has(cur)) return "punctuation";
-
+    stream.next();
     return null;
   }
 
   function tokenComment(stream: any, state: any): string {
-    while (!stream.eol()) {
-      const ch = stream.next();
-      if (ch === "*" && stream.eat("/")) {
+    const maxChars = 10000; // Prevent infinite loops
+    let chars = 0;
+    
+    while (!stream.eol() && chars < maxChars) {
+      chars++;
+      if (stream.match("-/")) {
         state.tokenize = tokenBase;
-        break;
+        return "comment";
       }
+      stream.next();
+    }
+    
+    if (chars >= maxChars) {
+      state.tokenize = tokenBase;
     }
     return "comment";
   }
 
-  function tokenString(quote: string) {
-    return function(stream: any, state: any): string {
-      let escaped = false, next;
-      while ((next = stream.next()) !== null) {
-        if (next === quote && !escaped) break;
-        escaped = !escaped && next === "\\";
-      }
-      if (!escaped) state.tokenize = tokenBase;
-      return "string";
-    };
+  // Strings are now handled directly in tokenBase for better performance
   }
 
   lean4Mode = {
