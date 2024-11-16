@@ -9,14 +9,20 @@ PROJECT_ROOT=$SCRIPT_DIR/..
 EXT_DIR=$PROJECT_ROOT/ext
 VENV_DIR=$PROJECT_ROOT/.venv
 
-# Create and activate virtual environment if it doesn't exist
+# Create virtual environment if it doesn't exist
 if [ ! -d "$VENV_DIR" ]; then
-    echo "Creating virtual environment..."
+    echo "Creating new virtual environment..."
     python3 -m venv "$VENV_DIR"
+else
+    echo "Using existing virtual environment..."
 fi
 
 echo "Activating virtual environment..."
 source "$VENV_DIR/bin/activate"
+
+# Update pip in virtual environment
+echo "Updating pip..."
+"$VENV_DIR/bin/python" -m pip install --upgrade pip
 
 # Check if node is installed and meets minimum version
 if ! command -v node >/dev/null 2>&1; then
