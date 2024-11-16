@@ -37,6 +37,9 @@ function getLean4mode() {
       state.tokenize = tokenComment;
       return tokenComment(stream, state);
     }
+    if (stream.match(/--.*$/)) {
+      return "comment";
+    }
 
     // Handle strings with match for better performance
     // Handle strings with escape sequences
