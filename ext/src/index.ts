@@ -10,7 +10,7 @@ import {
 
 // Following https://github.com/codemirror/legacy-modes
 import { StreamLanguage } from "@codemirror/language"
-import { basicSetup } from "codemirror"
+// import { basicSetup } from "codemirror"
 
 // Cache sets of keywords and operators
 const keywords1 = new Set("import unif_hint renaming inline hiding lemma variable theorem axiom inductive structure universe alias #help precedence postfix prefix infix infixl infixr notation #eval #check #reduce #exit end private using namespace instance section protected export set_option extends open example #print opaque def macro elab syntax macro_rules #reduce where abbrev noncomputable class attribute #synth mutual scoped local noncomputable theory parameter parameters variable variables reserve precedence postfix prefix notation infix infixl infixr begin by end set_option run_cmd #align #align_import".split(" "));
@@ -102,7 +102,7 @@ function getLean4mode() {
     blockCommentStart: "/-",
     blockCommentEnd: "-/"
   };
-  
+
   return lean4Mode;
 }
 
@@ -122,7 +122,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         name: 'codemirror:lean4',
         factory: () =>
           EditorExtensionRegistry.createConfigurableExtension(() =>
-            [basicSetup, StreamLanguage.define(getLean4mode())]
+            [StreamLanguage.define(getLean4mode())]
           ),
       })
     );
