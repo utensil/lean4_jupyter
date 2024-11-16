@@ -53,11 +53,6 @@ function getLean4mode() {
       stream.eatWhile(/\d/);
       if (stream.eat(".")) {
         stream.eatWhile(/\d/);
-        if (stream.eat(/[eE]/)) {
-          stream.eat(/[+-]/);
-          stream.eatWhile(/\d/);
-        }
-        return "number";
       }
       return "number";
     }
