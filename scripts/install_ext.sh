@@ -11,10 +11,10 @@ VENV_DIR=$PROJECT_ROOT/.venv
 
 # Create virtual environment if it doesn't exist
 if [ ! -d "$VENV_DIR" ]; then
-    echo "Creating new virtual environment..."
-    python3 -m venv "$VENV_DIR"
+  echo "Creating new virtual environment..."
+  python3 -m venv "$VENV_DIR"
 else
-    echo "Using existing virtual environment..."
+  echo "Using existing virtual environment..."
 fi
 
 echo "Activating virtual environment..."
@@ -26,52 +26,48 @@ echo "Updating pip..."
 
 # Check if node is installed and meets minimum version
 if ! command -v node >/dev/null 2>&1; then
-    echo "Node.js not found. Installing via nvm..."
-    install_nvm=true
+  echo "Node.js not found. Installing via nvm..."
+  install_nvm=true
 else
-    node_version=$(node -v | cut -d'v' -f2)
-    required_version="22.0.0"
-    if [ "$(printf '%s\n' "$required_version" "$node_version" | sort -V | head -n1)" = "$required_version" ]; then
-        echo "Node.js version $node_version is sufficient"
-        install_nvm=false
-    else
-        echo "Node.js version $node_version is below required version $required_version. Installing via nvm..."
-        install_nvm=true
-    fi
+  node_version=$(node -v | cut -d'v' -f2)
+  required_version="22.0.0"
+  if [ "$(printf '%s\n' "$required_version" "$node_version" | sort -V | head -n1)" = "$required_version" ]; then
+    echo "Node.js version $node_version is sufficient"
+    install_nvm=false
+  else
+    echo "Node.js version $node_version is below required version $required_version. Installing via nvm..."
+    install_nvm=true
+  fi
 fi
 
 if [ "$install_nvm" = true ]; then
-    # Install nvm if not present
-    if ! command -v nvm >/dev/null 2>&1; then
-        echo "Installing nvm..."
-        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-    fi
-
-    # Load nvm
+  # Install nvm if not present
+  if ! command -v nvm >/dev/null 2>&1; then
+    echo "Installing nvm..."
     export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+  fi
 
-    # Install and use Node.js version 22
-    nvm install 22
-    nvm use 22
+  # Load nvm
+  export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+  # Install and use Node.js version 22
+  nvm install 22
+  nvm use 22
 fi
 
 # Install required Python packages
 echo "Installing Python dependencies..."
 "$VENV_DIR/bin/pip" install ipykernel jupyterlab jupyter_packaging
 
-# Install yarn globally
-npm install -g yarn
-
 # Navigate to extension directory
 cd "$EXT_DIR"
 
 # Install the extension
 echo "Installing the JupyterLab extension..."
-yarn install
-yarn build
-
+jlpm install
+jlpm build
 
 # Create kernel for this virtual environment
 echo "Creating kernel..."
