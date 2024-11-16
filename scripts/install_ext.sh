@@ -62,12 +62,12 @@ echo "Creating custom kernel..."
 # Install in development mode
 echo "Installing in development mode..."
 "$VENV_DIR/bin/pip" install -e .
-"$VENV_DIR/bin/jupyter" labextension develop . --overwrite
+"$VENV_DIR/bin/jupyter-labextension" develop . --overwrite
 
 # Verify installations
 echo "Verifying kernel installation..."
-jupyter kernelspec list
+"$VENV_DIR/bin/jupyter" kernelspec list
 echo "Verifying extension installation..."
-"$VENV_DIR/bin/jupyter" labextension list
+"$VENV_DIR/bin/jupyter-labextension" list
 
 echo "JupyterLab extension installation completed successfully"
