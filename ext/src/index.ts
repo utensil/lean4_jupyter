@@ -45,21 +45,21 @@ function getLean4mode() {
     // Handle numbers more efficiently
     if (stream.match(/\d+(\.\d+)?/)) return "number";
 
-    // Try to match longer operators first
-    const opMatch = stream.match(/[!@#$%^&*+\-=<>?/\\|:;.,]+/);
-    if (opMatch) {
-      const op = opMatch[0];
-      if (operators.has(op)) return "operator";
-      if (punctuation.has(op)) return "punctuation";
-    }
-
-    // Handle keywords and identifiers
+    // Handle keywords and identifiers first
     const word = stream.match(/[\w$_]+/);
     if (word) {
       const cur = word[0];
       if (keywords1.has(cur)) return "keyword";
       if (keywords2.has(cur)) return "keyword";
       if (keywords3.has(cur)) return "keyword";
+    }
+
+    // Then try to match operators
+    const opMatch = stream.match(/[!@#$%^&*+\-=<>?/\\|:;.,]+/);
+    if (opMatch) {
+      const op = opMatch[0];
+      if (operators.has(op)) return "operator";
+      if (punctuation.has(op)) return "punctuation";
     }
 
     stream.next();
