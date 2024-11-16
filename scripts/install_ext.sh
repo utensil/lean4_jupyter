@@ -7,6 +7,16 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 PROJECT_ROOT=$SCRIPT_DIR/..
 EXT_DIR=$PROJECT_ROOT/ext
+VENV_DIR=$PROJECT_ROOT/.venv
+
+# Create and activate virtual environment if it doesn't exist
+if [ ! -d "$VENV_DIR" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv "$VENV_DIR"
+fi
+
+echo "Activating virtual environment..."
+source "$VENV_DIR/bin/activate"
 
 # Check if nvm is installed, install if not present
 if [ ! -d "${NVM_DIR:-$HOME/.nvm}" ]; then
