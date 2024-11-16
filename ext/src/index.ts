@@ -19,7 +19,7 @@ const keywords2 = new Set("forall fun obtain from have show assume let if else t
 
 const keywords3 = new Set("Type Prop Sort".split(" "));
 
-const operators = new Set("!= # & && * + - / @ ! -. -> . .. ... :: :> ; ;; < <- = == > _ | || ~ => <= >= /\\ \\/ ∀ Π λ ↔ ∧ ∨ ≠ ≤ ≥ ¬ ⁻¹ ⬝ ▸ → ∃ ≈ × ⌞ ⌟ ≡ ⟨ ⟩ ↦ ⋮ ▸ ⊆ ⊇ ∈ ∉".split(" "));
+const operators = new Set("!= & && * + - / @ ! -. -> . .. ... :: :> ; ;; < <- = == > _ | || ~ => <= >= /\\ \\/ ∀ Π λ ↔ ∧ ∨ ≠ ≤ ≥ ¬ ⁻¹ ⬝ ▸ → ∃ ≈ × ⌞ ⌟ ≡ ⟨ ⟩ ↦ ⋮ ▸ ⊆ ⊇ ∈ ∉".split(" "));
 
 const punctuation = new Set("( ) : { } [ ] ⦃ ⦄ := , ‹ › ⟨ ⟩".split(" "));
 
@@ -69,7 +69,7 @@ function getLean4mode() {
   function tokenComment(stream: any, state: any): string {
     const maxChars = 10000; // Prevent infinite loops
     let chars = 0;
-    
+
     while (!stream.eol() && chars < maxChars) {
       chars++;
       if (stream.match("-/")) {
@@ -78,7 +78,7 @@ function getLean4mode() {
       }
       stream.next();
     }
-    
+
     if (chars >= maxChars) {
       state.tokenize = tokenBase;
     }
