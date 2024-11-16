@@ -9,17 +9,21 @@ PROJECT_ROOT=$SCRIPT_DIR/..
 EXT_DIR=$PROJECT_ROOT/ext
 
 # Check if nvm is installed, install if not present
-if [ ! -d "$HOME/.nvm" ]; then
+if [ ! -d "${NVM_DIR:-$HOME/.nvm}" ]; then
     echo "nvm not found. Installing nvm..."
+    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    # Download and run the install script
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-    
-    # Load nvm
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-else
-    # Load existing nvm
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+fi
+
+# Load nvm
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# Verify nvm is available
+if ! command -v nvm &> /dev/null; then
+    echo "Failed to load nvm. Please check your installation."
+    exit 1
 fi
 
 # Install and use Node.js LTS version
