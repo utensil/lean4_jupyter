@@ -41,7 +41,7 @@ elan default leanprover/lean4:v4.11.0
 # install the Lean4 Jupyter kernel
 echo "${PROJECT_ROOT}[test]"
 (cd "$PROJECT_ROOT" && "$VENV_DIR/bin/pip" install -e '.[test]')
-"$VENV_DIR/bin/python" -m lean4_jupyter.install --user --name="lean4_jupyter_dev"
+"$VENV_DIR/bin/python" -m lean4_jupyter.install --user
 
 # # Install ipykernel in virtual environment
 # "$VENV_DIR/bin/pip" install ipykernel
