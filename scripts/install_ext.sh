@@ -35,8 +35,18 @@ cd "$EXT_DIR"
 
 # Install the extension
 echo "Installing the JupyterLab extension..."
-pip install .
+jlpm install
+jlpm build
+
+# Build and install using hatch
+echo "Building and installing with hatch..."
+pip install hatch
+hatch build
+pip install dist/*.whl
+
 jupyter lab build
+
+# Verify installation
 jupyter labextension list
 
 echo "JupyterLab extension installation completed successfully"
