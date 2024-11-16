@@ -11,8 +11,8 @@ VENV_DIR=$PROJECT_ROOT/.venv
 
 # Create and activate virtual environment if it doesn't exist
 if [ ! -d "$VENV_DIR" ]; then
-    echo "Creating virtual environment..."
-    python3 -m venv "$VENV_DIR"
+  echo "Creating virtual environment..."
+  python3 -m venv "$VENV_DIR"
 fi
 
 echo "Activating virtual environment..."
@@ -40,7 +40,7 @@ pip uninstall alectryon -y
 
 # install the Lean4 Jupyter kernel
 echo "${PROJECT_ROOT}[test]"
-pip install -f -e "${PROJECT_ROOT}[test]"
+(cd "$PROJECT_ROOT" && pip install -f -e '.[test]')
 python -m lean4_jupyter.install
 
 # Install the JupyterLab extension
