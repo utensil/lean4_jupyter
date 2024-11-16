@@ -59,13 +59,13 @@ If you are interested in one of these TODOs, or you have some other nice feature
 
 ### Prerequisites
 
-1. You need a working Lean 4 installation. You can install it via [elan](https://github.com/leanprover/elan), e.g. on Linux-like systems:
+1. A working Lean 4 installation. You can install it via [elan](https://github.com/leanprover/elan), e.g. on Linux-like systems:
 
 ```bash
 curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | bash -s -- -y --default-toolchain none
 ```
 
-2. You need a working Python (e.g. 3.11). If you prefer to use a virtual environment, you need to activate it before installing the kernel.
+2. A working Python installation (e.g. 3.11). If using a virtual environment, activate it before installing the kernel.
 
 ### Installation script
 
@@ -128,20 +128,23 @@ pip install notebook
 # pip install jupyterlab
 ```
 
-Then, install the kernel:
+Install the kernel using one of these options:
 
 ```bash
-# Option 1: Install from PyPI
-# see "Support matrix" for the tested versions
+# Option 1: Install from PyPI (see "Support matrix" for tested versions)
 pip install lean4_jupyter
-# Option 2 (recommended): install the latest version from the repo
+
+# Option 2 (recommended): Install latest version from repo
 pip install git+https://github.com/utensil/lean4_jupyter.git
-# or in development mode, check out the repo then run
+
+# Option 3: Install in development mode (after checking out repo)
 # pip install -e .
+
+# After installing, register the kernel
 python -m lean4_jupyter.install
 ```
 
-To verify that the kernel is installed correctly, run:
+Verify the kernel installation with:
 
 ```bash
 jupyter kernelspec list
