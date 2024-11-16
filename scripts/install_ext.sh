@@ -38,13 +38,10 @@ echo "Installing the JupyterLab extension..."
 jlpm install
 jlpm build
 
-# Build and install using hatch
-echo "Building and installing with hatch..."
-pip install hatch
-hatch build
-pip install dist/*.whl
-
-jupyter lab build
+# Install in development mode
+echo "Installing in development mode..."
+pip install -e .
+jupyter labextension develop . --overwrite
 
 # Verify installation
 jupyter labextension list
