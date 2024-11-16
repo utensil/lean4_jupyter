@@ -12,26 +12,22 @@ import {
 import { StreamLanguage } from "@codemirror/language"
 import { basicSetup } from "codemirror"
 
+// Cache sets of keywords and operators
+const keywords1 = new Set("import unif_hint renaming inline hiding lemma variable theorem axiom inductive structure universe alias #help precedence postfix prefix infix infixl infixr notation #eval #check #reduce #exit end private using namespace instance section protected export set_option extends open example #print opaque def macro elab syntax macro_rules #reduce where abbrev noncomputable class attribute #synth mutual scoped local noncomputable theory parameter parameters variable variables reserve precedence postfix prefix notation infix infixl infixr begin by end set_option run_cmd #align #align_import".split(" "));
+
+const keywords2 = new Set("forall fun obtain from have show assume let if else then by in with calc match nomatch do at suffices sorry admit".split(" "));
+
+const keywords3 = new Set("Type Prop Sort".split(" "));
+
+const operators = new Set("!= # & && * + - / @ ! -. -> . .. ... :: :> ; ;; < <- = == > _ | || ~ => <= >= /\\ \\/ ∀ Π λ ↔ ∧ ∨ ≠ ≤ ≥ ¬ ⁻¹ ⬝ ▸ → ∃ ≈ × ⌞ ⌟ ≡ ⟨ ⟩ ↦ ⋮ ▸ ⊆ ⊇ ∈ ∉".split(" "));
+
+const punctuation = new Set("( ) : { } [ ] ⦃ ⦄ := , ‹ › ⟨ ⟩".split(" "));
+
+// Cache the mode definition
+let lean4Mode: any = null;
+
 function getLean4mode() {
-
-  function words(str: string): { [key: string]: boolean } {
-    const obj: { [key: string]: boolean } = {};
-    const wordsArray = str.split(" ");
-    for (const word of wordsArray) {
-      obj[word] = true;
-    }
-    return obj;
-  }
-
-  const keywords1 = words("import unif_hint renaming inline hiding lemma variable theorem axiom inductive structure universe alias #help precedence postfix prefix infix infixl infixr notation #eval #check #reduce #exit end private using namespace instance section protected export set_option extends open example #print opaque def macro elab syntax macro_rules #reduce where abbrev noncomputable class attribute #synth mutual scoped local noncomputable theory parameter parameters variable variables reserve precedence postfix prefix notation infix infixl infixr begin by end set_option run_cmd #align #align_import");
-
-  const keywords2 = words("forall fun obtain from have show assume let if else then by in with calc match nomatch do at suffices sorry admit");
-
-  const keywords3 = words("Type Prop Sort");
-
-  const operators = words("!= # & && * + - / @ ! -. -> . .. ... :: :> ; ;; < <- = == > _ | || ~ => <= >= /\\ \\/ ∀ Π λ ↔ ∧ ∨ ≠ ≤ ≥ ¬ ⁻¹ ⬝ ▸ → ∃ ≈ × ⌞ ⌟ ≡ ⟨ ⟩ ↦ ⋮ ▸ ⊆ ⊇ ∈ ∉");
-
-  const punctuation = words("( ) : { } [ ] ⦃ ⦄ := , ‹ › ⟨ ⟩");
+  if (lean4Mode) return lean4Mode;
 
   function tokenBase(stream: any, state: any): string | null {
     if (stream.eatSpace()) return null;
@@ -68,11 +64,11 @@ function getLean4mode() {
 
     stream.eatWhile(/[\w\$_]/);
     const cur = stream.current();
-    if (keywords1.hasOwnProperty(cur)) return "keyword";
-    if (keywords2.hasOwnProperty(cur)) return "keyword";
-    if (keywords3.hasOwnProperty(cur)) return "keyword";
-    if (operators.hasOwnProperty(cur)) return "operator";
-    if (punctuation.hasOwnProperty(cur)) return "punctuation";
+    if (keywords1.has(cur)) return "keyword";
+    if (keywords2.has(cur)) return "keyword";
+    if (keywords3.has(cur)) return "keyword";
+    if (operators.has(cur)) return "operator";
+    if (punctuation.has(cur)) return "punctuation";
 
     return null;
   }
@@ -100,7 +96,7 @@ function getLean4mode() {
     };
   }
 
-  return {
+  lean4Mode = {
     startState: function() {
       return { tokenize: tokenBase };
     },
@@ -111,7 +107,8 @@ function getLean4mode() {
     blockCommentStart: "/-",
     blockCommentEnd: "-/"
   };
-
+  
+  return lean4Mode;
 }
 
 /**
