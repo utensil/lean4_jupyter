@@ -69,9 +69,9 @@ echo "Installing the JupyterLab extension..."
 jlpm install
 jlpm build
 
-# Create kernel for this virtual environment
-echo "Creating kernel..."
-"$VENV_DIR/bin/python" -m ipykernel install
+# # Create kernel for this virtual environment
+# echo "Creating kernel..."
+# "$VENV_DIR/bin/python" -m ipykernel install
 
 # Install in development mode
 echo "Installing in development mode..."
