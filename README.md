@@ -96,7 +96,7 @@ then open notebooks in the `examples` folder to familiarize yourself with the ba
 
 ### Manual installation
 
-First, verify that `lean` and `lake` is in your `PATH`:
+1. Verify that `lean` and `lake` are in your `PATH`:
 
 ```bash
 lean --version
@@ -104,11 +104,11 @@ lake --help|head -n 1
 ```
 they should output Lean/Lake versions, respectively. If not, you can install them via [elan](https://github.com/leanprover/elan).
 
-Then, you need to have a working `repl` in your `PATH`.
+2. Install a working `repl` in your `PATH`.
 
 You can build it from source (please read and adjust them before executing) using the example script `scripts/install_repl.sh`.
 
-Verify that `repl` is working:
+3. Verify that `repl` is working:
 
 ```bash
 echo '{"cmd": "#eval Lean.versionString"}'|repl
