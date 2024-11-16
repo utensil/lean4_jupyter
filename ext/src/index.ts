@@ -45,16 +45,17 @@ function getLean4mode() {
     // Handle numbers more efficiently
     if (stream.match(/\d+(\.\d+)?/)) return "number";
 
-    // Handle keywords and identifiers first
-    const word = stream.match(/#?[\w$_]+/);
+    // Handle keywords and identifiers first (including dot notation)
+    const word = stream.match(/#?[\w$_]+(?:\.[\w$_]+)*/);
     if (word) {
       const cur = word[0];
       if (keywords1.has(cur) || (cur.startsWith('#') && keywords1.has(cur.substring(1)))) return "keyword";
       if (keywords2.has(cur)) return "keyword";
       if (keywords3.has(cur)) return "keyword";
+      return "variable";
     }
 
-    // Then try to match operators
+    // Then try to match operators as standalone tokens
     const opMatch = stream.match(/[!@#$%^&*+\-=<>?/\\|:;.,]+/);
     if (opMatch) {
       const op = opMatch[0];
