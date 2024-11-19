@@ -55,6 +55,13 @@ Note: the script could remove an existing `repl`, and it assumes `/usr/local/bin
 
 If you prefer manual installation, please read __Manual installation__ below.
 
+The installation script creates a virtual environment in the `.venv` folder in the repo, and installs the kernel into it. You can activate the virtual environment with:
+
+```bash
+source .venv/bin/activate
+```
+Then use jupyter as usual.
+
 ### Usage
 
 To use it, run one of:
