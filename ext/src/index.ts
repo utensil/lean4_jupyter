@@ -4,8 +4,7 @@ import {
 } from '@jupyterlab/application';
 
 import {
-  EditorExtensionRegistry,
-  IEditorExtensionRegistry
+  IEditorLanguageRegistry
 } from '@jupyterlab/codemirror';
 
 // Following https://github.com/codemirror/legacy-modes
@@ -133,17 +132,15 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab-lean4-codemirror-extension:plugin',
   description: 'A JupyterLab extension for CodeMirror Lean 4 mode',
   autoStart: true,
-  requires: [IEditorExtensionRegistry],
-  activate: (app: JupyterFrontEnd, extensions: IEditorExtensionRegistry) => {
-    extensions.addExtension(
-      Object.freeze({
-        name: 'codemirror:lean4',
-        factory: () =>
-          EditorExtensionRegistry.createConfigurableExtension(() =>
-            [StreamLanguage.define(getLean4mode())]
-          ),
+  requires: [IEditorLanguageRegistry],
+  activate: (app: JupyterFrontEnd, languages: IEditorLanguageRegistry) => {
+    languages.addLanguage({
+      name: 'lean4',
+      mime: 'text/x-lean4',
+      load: async () => ({
+        language: StreamLanguage.define(getLean4mode())
       })
-    );
+    });
     console.log('JupyterLab extension jupyterlab-lean4-codemirror-extension is activated!');
   }
 };
