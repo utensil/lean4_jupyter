@@ -7,6 +7,8 @@ import {
   IEditorLanguageRegistry
 } from '@jupyterlab/codemirror';
 
+import { LanguageSupport } from '@codemirror/language';
+
 // Following https://github.com/codemirror/legacy-modes
 import { StreamLanguage } from "@codemirror/language"
 // import { basicSetup } from "codemirror"
@@ -137,9 +139,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     languages.addLanguage({
       name: 'lean4',
       mime: 'text/x-lean4',
-      load: async () => ({
-        language: StreamLanguage.define(getLean4mode())
-      })
+      load: async () => new LanguageSupport(StreamLanguage.define(getLean4mode()))
     });
     console.log('JupyterLab extension jupyterlab-lean4-codemirror-extension is activated!');
   }
