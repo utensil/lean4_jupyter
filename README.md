@@ -25,7 +25,9 @@ The kernel can:
 
 Output:
 
-- In `jupyter notebook` and alike: echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style, at the corresponding line (not columns yet), with messages, proof states etc.
+- In `jupyter notebook` and alike:
+    - echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style, at the corresponding line (not columns yet), with messages, proof states etc.
+    - highlights Lean 4 syntax in code cells via a companion JuptyerLab extension `jupyterlab-lean4-codemirror-extension`
 - In `jupyter console` and alike: echos the input annotated in [codespan](https://github.com/brendanzab/codespan) style, at the corresponding `line:column`, with messages, proof states etc.
 - Raw `repl` input/output in JSON format can be inspected by click-to-expand in the WebUI.
 
@@ -36,7 +38,6 @@ The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and test
 - Add support for [Quarto](https://quarto.org/), possibly integrate with [Molten](https://github.com/benlubas/molten-nvim) in Neovim
 - Add support for [Incrementality](https://lean-lang.org/blog/2024-7-1-lean-490/), see also [repl#57](https://github.com/leanprover-community/repl/pull/57)
 - Make use of [Goal State Diffing](https://leanprover.zulipchat.com/#narrow/channel/113488-general/topic/lean.2Envim/near/478572115)
-- Improve the syntax highlighting in the WebUI, currently it sees Lean 4 as Python
 - Improve the alectryon annotation to support annotations in the middle of a line
 - Provide a switch to use codespan instead of alectryon in the WebUI, or a way to see warnings and errors without hovering or clicking
 - Provide a switch for raw `repl` input/output inspection as a magic, disable it by default
@@ -75,7 +76,7 @@ The following script will install a `repl` of a compatible Lean 4 toolchain, the
 git clone https://github.com/utensil/lean4_jupyter.git && cd lean4_jupyter && ./scripts/prep.sh
 ```
 
-Note: the script could remove an existing `repl`, and it assumes `/usr/local/bin` is in your `PATH`, it will also set the default Lean 4 toolchain to the same as the one used by the `repl` to ensure `repl` works outside projects.
+Note: the script could remove an existing `repl`, and it assumes `/usr/local/bin` is in your `PATH`, it will also set the default Lean 4 toolchain to the same as the one used by the `repl` to ensure `repl` works outside projects. For installing the extension to highlight Lean 4 syntax in JupyterLab, it will also use nvm to install Node.js if it's not installed.
 
 If you prefer manual installation, please read __Manual installation__ below.
 
