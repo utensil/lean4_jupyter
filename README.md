@@ -33,28 +33,7 @@ Output:
 
 The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and tested with [nbval](https://github.com/computationalmodelling/nbval) in CI.
 
-## What's next
 
-- Add support for [Quarto](https://quarto.org/), possibly integrate with [Molten](https://github.com/benlubas/molten-nvim) in Neovim
-- Add support for [Incrementality](https://lean-lang.org/blog/2024-7-1-lean-490/), see also [repl#57](https://github.com/leanprover-community/repl/pull/57)
-- Make use of [Goal State Diffing](https://leanprover.zulipchat.com/#narrow/channel/113488-general/topic/lean.2Envim/near/478572115)
-- Improve the alectryon annotation to support annotations in the middle of a line
-- Provide a switch to use codespan instead of alectryon in the WebUI, or a way to see warnings and errors without hovering or clicking
-- Provide a switch for raw `repl` input/output inspection as a magic, disable it by default
-- Learn from [previous prototypes](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Prototype.3A.20Jupyter.20for.20Lean4) to improve UX
-- Make magics like `%cd` and `%load` work more robustly
-- Support show `tactics` after `%load`
-- Add all `repl` test cases to the CI and set up coverage
-- Improve UI in Jupyter Dark themes
-- Support running lake commands via `%lake`, e.g. `%lake build`
-- Better (streamed) feedback for long running commands such as `import`
-- Support changing Lean toolchain and adding dependencies in an ad hoc manner
-- Minimize emmitted HTML code
-- Possibly use [@shikijs/twoslash](https://shiki.style/packages/twoslash#rendererrich) style annotation and no longer depends on alectryon
-- Possibly change to [Aya](https://github.com/aya-prover/aya-dev/blob/main/cli-impl/src/test/resources/negative/PatCohError.txt) style annotation for plain text output
-- Minor code refactor to smooth things out
-
-If you are interested in one of these TODOs, or you have some other nice features in mind, you may raise the discussion by opening an issue or discuss it in the [Zulip topic](https://leanprover.zulipchat.com/#narrow/stream/113488-general/topic/lean4_jupyter.3A.20A.20Lean.204.20Jupyter.20kernel.20via.20repl).
 
 ## Getting started
 
@@ -82,10 +61,14 @@ To use it, run one of:
 
 ```bash
 # Web UI
+
+# classic notebook
 jupyter notebook
+# JuptyerLab (recommended)
 jupyter lab
 
 # Console UI
+
 # hint: use Ctrl-D and confirm with y to exit
 jupyter console --kernel lean4
 # hint: you need to run `pip install PyQt5 qtconsole` to install it
@@ -188,6 +171,29 @@ I've always wanted to do literate programming with Lean 4 in Jupyter, but Lean L
 The idea came to me in an afternoon, and I thought it's technically trivial to implement overnight thanks to repl. It took me a bit longer to work out the logistics of UX and polish the code, but it's fun to see the potential.
 
 This also serves as a human-friendly way to understand how Lean 4 repl works, for integrating repl with ML systems.
+
+## What's next
+
+- Add support for [Quarto](https://quarto.org/), possibly integrate with [Molten](https://github.com/benlubas/molten-nvim) in Neovim
+- Add support for [Incrementality](https://lean-lang.org/blog/2024-7-1-lean-490/), see also [repl#57](https://github.com/leanprover-community/repl/pull/57)
+- Make use of [Goal State Diffing](https://leanprover.zulipchat.com/#narrow/channel/113488-general/topic/lean.2Envim/near/478572115)
+- Improve the alectryon annotation to support annotations in the middle of a line
+- Provide a switch to use codespan instead of alectryon in the WebUI, or a way to see warnings and errors without hovering or clicking
+- Provide a switch for raw `repl` input/output inspection as a magic, disable it by default
+- Learn from [previous prototypes](https://leanprover.zulipchat.com/#narrow/stream/270676-lean4/topic/Prototype.3A.20Jupyter.20for.20Lean4) to improve UX
+- Make magics like `%cd` and `%load` work more robustly
+- Support show `tactics` after `%load`
+- Add all `repl` test cases to the CI and set up coverage
+- Improve UI in Jupyter Dark themes
+- Support running lake commands via `%lake`, e.g. `%lake build`
+- Better (streamed) feedback for long running commands such as `import`
+- Support changing Lean toolchain and adding dependencies in an ad hoc manner
+- Minimize emmitted HTML code
+- Possibly use [@shikijs/twoslash](https://shiki.style/packages/twoslash#rendererrich) style annotation and no longer depends on alectryon
+- Possibly change to [Aya](https://github.com/aya-prover/aya-dev/blob/main/cli-impl/src/test/resources/negative/PatCohError.txt) style annotation for plain text output
+- Minor code refactor to smooth things out
+
+If you are interested in one of these TODOs, or you have some other nice features in mind, you may raise the discussion by opening an issue or discuss it in the [Zulip topic](https://leanprover.zulipchat.com/#narrow/stream/113488-general/topic/lean4_jupyter.3A.20A.20Lean.204.20Jupyter.20kernel.20via.20repl).
 
 ## Inspired by
 
