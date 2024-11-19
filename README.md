@@ -68,7 +68,7 @@ curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf 
 
 2. A working Python installation (e.g. 3.11). If using a virtual environment, activate it before installing the kernel.
 
-### Installation script
+### One-liner installation
 
 The following script will install a `repl` of a compatible Lean 4 toolchain, the kernel, and prepare the demo Lean 4 project.
 
@@ -153,7 +153,7 @@ jupyter kernelspec list
 
 #### (Optional) Installing the JupyterLab Extension
 
-If you are using JupyterLab, you can install the JupyterLab extension to enhance your experience with Lean 4 syntax highlighting for cells:
+If you are using JupyterLab, you can install the JupyterLab extension to enhance your experience with Lean 4 syntax highlighting for code cells:
 
 1. Ensure Node.js is installed (version 22.0.0 or higher):
 
@@ -183,25 +183,6 @@ jupyter-labextension install .
 ```bash
 jupyter-labextension list
 ```
-
-To use it, run one of:
-
-```bash
-# Web UI
-
-# hint: run `pip install notebook` to install it
-jupyter notebook
-# hint: run `pip install juptyerlab` to install it
-jupyter lab
-
-# Console UI
-
-# hint: use Ctrl-D and confirm with y to exit
-jupyter console --kernel lean4
-# hint: you need to run `pip install PyQt5 qtconsole` to install it
-jupyter qtconsole --kernel lean4
-```
-
 ## Rationale
 
 I've always wanted to do literate programming with Lean 4 in Jupyter, but Lean LSP and Infoview in VS Code has provided an immersive experience with immediate feedback, so I could never imagine a better way to interact with Lean 4, until interacting with repl makes me believe that _limitless backtrack_ is another feature that best accompanies the _reproducible interactivity_ of alectryon style annotations.
