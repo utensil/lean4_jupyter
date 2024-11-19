@@ -25,7 +25,9 @@ The kernel can:
 
 Output:
 
-- In `jupyter notebook` and alike: echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style, at the corresponding line (not columns yet), with messages, proof states etc.
+- In `jupyter notebook` and alike:
+    - echos the input annotated in [alectryon](https://github.com/cpitclaudel/alectryon?tab=readme-ov-file#as-a-library) style, at the corresponding line (not columns yet), with messages, proof states etc.
+    - highlights Lean 4 syntax in code cells via a companion JuptyerLab extension `jupyterlab-lean4-codemirror-extension`
 - In `jupyter console` and alike: echos the input annotated in [codespan](https://github.com/brendanzab/codespan) style, at the corresponding `line:column`, with messages, proof states etc.
 - Raw `repl` input/output in JSON format can be inspected by click-to-expand in the WebUI.
 
@@ -36,7 +38,6 @@ The kernel code is linted by [flake8](https://github.com/PyCQA/flake8), and test
 - Add support for [Quarto](https://quarto.org/), possibly integrate with [Molten](https://github.com/benlubas/molten-nvim) in Neovim
 - Add support for [Incrementality](https://lean-lang.org/blog/2024-7-1-lean-490/), see also [repl#57](https://github.com/leanprover-community/repl/pull/57)
 - Make use of [Goal State Diffing](https://leanprover.zulipchat.com/#narrow/channel/113488-general/topic/lean.2Envim/near/478572115)
-- Improve the syntax highlighting in the WebUI, currently it sees Lean 4 as Python
 - Improve the alectryon annotation to support annotations in the middle of a line
 - Provide a switch to use codespan instead of alectryon in the WebUI, or a way to see warnings and errors without hovering or clicking
 - Provide a switch for raw `repl` input/output inspection as a magic, disable it by default
@@ -59,13 +60,13 @@ If you are interested in one of these TODOs, or you have some other nice feature
 
 ### Prerequisites
 
-1. You need a working Lean 4 installation. You can install it via [elan](https://github.com/leanprover/elan), e.g. on Linux-like systems:
+1. A working Lean 4 installation. You can install it via [elan](https://github.com/leanprover/elan), e.g. on Linux-like systems:
 
 ```bash
 curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | bash -s -- -y --default-toolchain none
 ```
 
-2. You need a working Python (e.g. 3.11). If you prefer to use a virtual environment, you need to activate it before installing the kernel.
+2. A working Python installation (e.g. 3.11). If using a virtual environment, activate it before installing the kernel.
 
 ### Installation script
 
@@ -75,7 +76,7 @@ The following script will install a `repl` of a compatible Lean 4 toolchain, the
 git clone https://github.com/utensil/lean4_jupyter.git && cd lean4_jupyter && ./scripts/prep.sh
 ```
 
-Note: the script could remove an existing `repl`, and it assumes `/usr/local/bin` is in your `PATH`, it will also set the default Lean 4 toolchain to the same as the one used by the `repl` to ensure `repl` works outside projects.
+Note: the script could remove an existing `repl`, and it assumes `/usr/local/bin` is in your `PATH`, it will also set the default Lean 4 toolchain to the same as the one used by the `repl` to ensure `repl` works outside projects. For installing the extension to highlight Lean 4 syntax in JupyterLab, it will also use nvm to install Node.js if it's not installed.
 
 If you prefer manual installation, please read __Manual installation__ below.
 
@@ -96,7 +97,7 @@ then open notebooks in the `examples` folder to familiarize yourself with the ba
 
 ### Manual installation
 
-First, verify that `lean` and `lake` is in your `PATH`:
+1. Verify that `lean` and `lake` are in your `PATH`:
 
 ```bash
 lean --version
@@ -104,11 +105,11 @@ lake --help|head -n 1
 ```
 they should output Lean/Lake versions, respectively. If not, you can install them via [elan](https://github.com/leanprover/elan).
 
-Then, you need to have a working `repl` in your `PATH`.
+2. Install a working `repl` in your `PATH`.
 
 You can build it from source (please read and adjust them before executing) using the example script `scripts/install_repl.sh`.
 
-Verify that `repl` is working:
+3. Verify that `repl` is working:
 
 ```bash
 echo '{"cmd": "#eval Lean.versionString"}'|repl
@@ -120,7 +121,7 @@ In case `repl` hangs, you could kill it with
 ps aux|grep repl|grep -v grep|awk '{print $2}'|xargs kill -9
 ```
 
-Then, ensure that you have `python`, `pip` installed, and install Jupyter:
+4. Ensure that you have `python`, `pip` installed, and install Jupyter:
 
 ```bash
 pip install notebook
@@ -128,17 +129,59 @@ pip install notebook
 # pip install jupyterlab
 ```
 
-Then, install the kernel:
+Install the kernel using one of these options:
 
 ```bash
-# Option 1: Install from PyPI
-# see "Support matrix" for the tested versions
+# Option 1: Install from PyPI (see "Support matrix" for tested versions)
 pip install lean4_jupyter
-# Option 2 (recommended): install the latest version from the repo
+
+# Option 2 (recommended): Install latest version from repo
 pip install git+https://github.com/utensil/lean4_jupyter.git
-# or in development mode, check out the repo then run
+
+# Option 3: Install in development mode (after checking out repo)
 # pip install -e .
+
+# After installing, register the kernel
 python -m lean4_jupyter.install
+```
+
+Verify the kernel installation with:
+
+```bash
+jupyter kernelspec list
+```
+
+#### (Optional) Installing the JupyterLab Extension
+
+If you are using JupyterLab, you can install the JupyterLab extension to enhance your experience with Lean 4 syntax highlighting for cells:
+
+1. Ensure Node.js is installed (version 22.0.0 or higher):
+
+```bash
+node -v
+```
+
+2. Install Python dependencies:
+
+```bash
+pip install ipykernel jupyterlab jupyter_packaging
+```
+
+3. Clone the repository (if not already done) and install the extension:
+
+```bash
+git clone https://github.com/utensil/lean4_jupyter.git
+cd lean4_jupyter/ext
+jlpm install
+jlpm build
+pip install .
+jupyter-labextension install .
+```
+
+4. Verify the installation:
+
+```bash
+jupyter-labextension list
 ```
 
 To use it, run one of:

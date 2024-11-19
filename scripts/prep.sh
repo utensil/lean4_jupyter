@@ -7,6 +7,23 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 PROJECT_ROOT=$SCRIPT_DIR/..
 REPL_HOME=$PROJECT_ROOT/.lean4_jupyter/repl
+VENV_DIR=$PROJECT_ROOT/.venv
+
+# Only create/use venv if not in CI
+if [ -z "$CI" ]; then
+  if [ ! -d "$VENV_DIR" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv "$VENV_DIR"
+  fi
+
+  echo "Activating virtual environment..."
+  source "$VENV_DIR/bin/activate"
+  PIP="$VENV_DIR/bin/pip"
+  PYTHON="$VENV_DIR/bin/python"
+else
+  PIP="pip"
+  PYTHON="python"
+fi
 
 # force clean up
 rm -rf "$REPL_HOME" || echo "No .lean4_jupyter/repl to clean up"
@@ -26,12 +43,18 @@ elan default leanprover/lean4:v4.11.0
 # fi
 
 # force uninstall alectryon
-pip uninstall alectryon -y
+"$PIP" uninstall alectryon -y
 
 # install the Lean4 Jupyter kernel
-echo "${PROJECT_ROOT}[test]"
-pip install -f -e "${PROJECT_ROOT}[test]"
-python -m lean4_jupyter.install
+(cd "$PROJECT_ROOT" && "$PIP" install -e '.[test]')
+"$PYTHON" -m lean4_jupyter.install --user
+
+# # Install ipykernel in virtual environment
+# "$VENV_DIR/bin/pip" install ipykernel
+# "$VENV_DIR/bin/python" -m ipykernel install --user --name="lean4_jupyter_dev"
+
+# Install the JupyterLab extension
+"$SCRIPT_DIR"/install_ext.sh
 
 # prepare demo_proj
 cd examples/demo_proj

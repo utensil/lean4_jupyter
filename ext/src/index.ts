@@ -4,96 +4,113 @@ import {
 } from '@jupyterlab/application';
 
 import {
-  EditorExtensionRegistry,
-  IEditorExtensionRegistry
+  IEditorLanguageRegistry
 } from '@jupyterlab/codemirror';
+
+import { LanguageSupport } from '@codemirror/language';
 
 // Following https://github.com/codemirror/legacy-modes
 import { StreamLanguage } from "@codemirror/language"
-import { basicSetup } from "codemirror"
+// import { basicSetup } from "codemirror"
+
+// Cache sets of keywords and operators
+const keywords1 = new Set("import unif_hint renaming inline hiding lemma variable theorem axiom inductive structure universe alias #help precedence postfix prefix infix infixl infixr notation #eval #check #reduce #exit end private using namespace instance section protected export set_option extends open example #print opaque def macro elab syntax macro_rules #reduce where abbrev noncomputable class attribute #synth mutual scoped local noncomputable theory parameter parameters variable variables reserve precedence postfix prefix notation infix infixl infixr begin by end set_option run_cmd #align #align_import".split(" "));
+
+const keywords2 = new Set("forall fun obtain from have show assume let if else then by in with calc match nomatch do at suffices sorry admit".split(" "));
+
+const keywords3 = new Set("Type Prop Sort".split(" "));
+
+const operators = new Set("!= & && * + - / @ ! -. -> . .. ... :: :> ; ;; < <- = == > _ | || ~ => <= >= /\\ \\/ ∀ Π λ ↔ ∧ ∨ ≠ ≤ ≥ ¬ ⁻¹ ⬝ ▸ → ∃ ≈ × ⌞ ⌟ ≡ ⟨ ⟩ ↦ ⋮ ▸ ⊆ ⊇ ∈ ∉".split(" "));
+
+const punctuation = new Set("( ) : { } [ ] ⦃ ⦄ := , ‹ › ⟨ ⟩".split(" "));
+
+// Cache the mode definition
+let lean4Mode: any = null;
 
 function getLean4mode() {
-
-  function words(str: string): { [key: string]: boolean } {
-    const obj: { [key: string]: boolean } = {};
-    const wordsArray = str.split(" ");
-    for (const word of wordsArray) {
-      obj[word] = true;
-    }
-    return obj;
-  }
-
-  const keywords1 = words("import unif_hint renaming inline hiding lemma variable theorem axiom inductive structure universe alias #help precedence postfix prefix infix infixl infixr notation #eval #check #reduce #exit end private using namespace instance section protected export set_option extends open example #print opaque def macro elab syntax macro_rules #reduce where abbrev noncomputable class attribute #synth mutual scoped local noncomputable theory parameter parameters variable variables reserve precedence postfix prefix notation infix infixl infixr begin by end set_option run_cmd");
-
-  const keywords2 = words("forall fun obtain from have show assume let if else then by in with calc match nomatch do at suffices");
-
-  const keywords3 = words("Type Prop Sort");
-
-  const operators = words("!= # & && * + - / @ ! -. -> . .. ... :: :> ; ;; < <- = == > _ | || ~ => <= >= /\\ \\/ ∀ Π λ ↔ ∧ ∨ ≠ ≤ ≥ ¬ ⁻¹ ⬝ ▸ → ∃ ≈ × ⌞ ⌟ ≡ ⟨ ⟩ ↦");
-
-  const punctuation = words("( ) : { } [ ] ⦃ ⦄ := , ‹ ›");
+  if (lean4Mode) return lean4Mode;
 
   function tokenBase(stream: any, state: any): string | null {
     if (stream.eatSpace()) return null;
 
-    const ch = stream.next();
-    if (ch === "/") {
-      if (stream.eat("/")) {
-        stream.skipToEnd();
-        return "comment";
-      }
-      if (stream.eat("*")) {
-        state.tokenize = tokenComment;
-        return tokenComment(stream, state);
-      }
+    // Handle comments first
+    if (stream.match("/-")) {
+      state.tokenize = tokenComment;
+      return tokenComment(stream, state);
+    }
+    if (stream.match(/--.*$/)) {
+      return "comment";
     }
 
-    if (ch === '"' || ch === "'") {
-      state.tokenize = tokenString(ch);
-      return state.tokenize(stream, state);
+    // Handle strings with match for better performance
+    // Handle strings with escape sequences
+    if (stream.match(/"/)) {
+      state.tokenize = tokenString;
+      return tokenString(stream, state);
     }
 
-    if (/\d/.test(ch)) {
-      stream.eatWhile(/\d/);
-      if (stream.eat(".")) stream.eatWhile(/\d/);
-      return "number";
+    // Handle numbers including scientific notation
+    if (stream.match(/(\d+\.\d*)([eE][+-]?[0-9]+)?/) || 
+        stream.match(/\d+/)) return "number";
+
+    // Handle keywords and identifiers first (including dot notation)
+    const word = stream.match(/#?[\w$_]+(?:\.[\w$_]+)*/);
+    if (word) {
+      const cur = word[0];
+      if (keywords1.has(cur) || (cur.startsWith('#') && keywords1.has(cur.substring(1)))) return "keyword";
+      if (keywords2.has(cur)) return "keyword";
+      if (keywords3.has(cur)) return "keyword";
+      return "variable";
     }
 
-    stream.eatWhile(/[\w\$_]/);
-    const cur = stream.current();
-    if (keywords1.hasOwnProperty(cur)) return "keyword";
-    if (keywords2.hasOwnProperty(cur)) return "keyword";
-    if (keywords3.hasOwnProperty(cur)) return "keyword";
-    if (operators.hasOwnProperty(cur)) return "operator";
-    if (punctuation.hasOwnProperty(cur)) return "punctuation";
+    // Try to match operators and punctuation, longest matches first
+    for (const op of operators) {
+      if (stream.match(op, true)) return "operator";
+    }
+    for (const p of punctuation) {
+      if (stream.match(p, true)) return "punctuation";
+    }
 
+    stream.next();
     return null;
   }
 
+  function tokenString(stream: any, state: any): string {
+    let escaped = false;
+    while (!stream.eol()) {
+      if (!escaped && stream.match(/\\[n"\\\n]/)) {
+        escaped = true;
+        continue;
+      }
+      if (!escaped && stream.next() === '"') {
+        state.tokenize = tokenBase;
+        return "string";
+      }
+      escaped = false;
+    }
+    return "string";
+  }
+
   function tokenComment(stream: any, state: any): string {
+    let nested = 1;
     while (!stream.eol()) {
       const ch = stream.next();
-      if (ch === "*" && stream.eat("/")) {
-        state.tokenize = tokenBase;
-        break;
+      if (ch === '/' && stream.peek() === '-') {
+        stream.next();
+        nested++;
+      } else if (ch === '-' && stream.peek() === '/') {
+        stream.next();
+        nested--;
+        if (nested === 0) {
+          state.tokenize = tokenBase;
+          return "comment";
+        }
       }
     }
     return "comment";
   }
 
-  function tokenString(quote: string) {
-    return function(stream: any, state: any): string {
-      let escaped = false, next;
-      while ((next = stream.next()) !== null) {
-        if (next === quote && !escaped) break;
-        escaped = !escaped && next === "\\";
-      }
-      if (!escaped) state.tokenize = tokenBase;
-      return "string";
-    };
-  }
-
-  return {
+  lean4Mode = {
     startState: function() {
       return { tokenize: tokenBase };
     },
@@ -105,6 +122,7 @@ function getLean4mode() {
     blockCommentEnd: "-/"
   };
 
+  return lean4Mode;
 }
 
 /**
@@ -116,17 +134,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab-lean4-codemirror-extension:plugin',
   description: 'A JupyterLab extension for CodeMirror Lean 4 mode',
   autoStart: true,
-  requires: [IEditorExtensionRegistry],
-  activate: (app: JupyterFrontEnd, extensions: IEditorExtensionRegistry) => {
-    extensions.addExtension(
-      Object.freeze({
-        name: 'codemirror:lean4',
-        factory: () =>
-          EditorExtensionRegistry.createConfigurableExtension(() =>
-            [basicSetup, StreamLanguage.define(getLean4mode())]
-          ),
-      })
-    );
+  requires: [IEditorLanguageRegistry],
+  activate: (app: JupyterFrontEnd, languages: IEditorLanguageRegistry) => {
+    languages.addLanguage({
+      name: 'lean4',
+      mime: 'text/x-lean4',
+      load: async () => new LanguageSupport(StreamLanguage.define(getLean4mode()))
+    });
     console.log('JupyterLab extension jupyterlab-lean4-codemirror-extension is activated!');
   }
 };
