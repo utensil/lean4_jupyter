@@ -60,11 +60,7 @@ If you are interested in one of these TODOs, or you have some other nice feature
 
 ### Prerequisites
 
-1. A working Lean 4 installation. You can install it via [elan](https://github.com/leanprover/elan), e.g. on Linux-like systems:
-
-```bash
-curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | bash -s -- -y --default-toolchain none
-```
+1. A working Lean 4 installation. You can install it via [elan](https://github.com/leanprover/elan).
 
 2. A working Python installation (e.g. 3.11). If using a virtual environment, activate it before installing the kernel.
 
@@ -79,6 +75,8 @@ git clone https://github.com/utensil/lean4_jupyter.git && cd lean4_jupyter && ./
 Note: the script could remove an existing `repl`, and it assumes `/usr/local/bin` is in your `PATH`, it will also set the default Lean 4 toolchain to the same as the one used by the `repl` to ensure `repl` works outside projects. For installing the extension to highlight Lean 4 syntax in JupyterLab, it will also use nvm to install Node.js if it's not installed.
 
 If you prefer manual installation, please read __Manual installation__ below.
+
+### Usage
 
 To use it, run one of:
 
